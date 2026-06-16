@@ -1,0 +1,14 @@
+{
+    "name": "firebase/php-jwt",
+    "autoload": {
+        "psr-4": {
+            "Firebase\\PhpJwt\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "hana"
+        }
+    ],
+    "require": {}
+}
