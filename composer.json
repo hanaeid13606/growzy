@@ -1,14 +1,12 @@
 {
-    "name": "firebase/php-jwt",
-    "autoload": {
-        "psr-4": {
-            "Firebase\\PhpJwt\\": "src/"
-        }
-    },
+    "name": "growzy/backend",
     "authors": [
         {
-            "name": "hana"
+            "name": "hana eid",
+            "email": "hanaeid136@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "firebase/php-jwt": "^7.1"
+    }
 }
