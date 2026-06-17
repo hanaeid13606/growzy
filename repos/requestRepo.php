@@ -8,24 +8,29 @@ function CreateRequest(
     $type,
     $status,
     $userID,
-    $ideaID
+    $ideaID,
+    $adminID = null,     
+    $is_deleted = 0,     
+    $deleted_at = null
 )
 {
     $query = "
     INSERT INTO request
-    (description, documentation, type, status, userID, ideaID)
-    VALUES (?,?,?,?,?,?)
+    (description, documentation, type, status, userID, ideaID, adminID, is_deleted, deleted_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ";
 
     $stmt = $pdo->prepare($query);
-
-    $result = $stmt->execute([
+    return $stmt->execute([
         $description,
         $documentation,
         $type,
         $status,
         $userID,
-        $ideaID
+        $ideaID,
+        $adminID,
+        $is_deleted,
+        $deleted_at
     ]);
 }
 
