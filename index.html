@@ -753,6 +753,27 @@
                 </button>
             </div>
 
+            <!-- Ideas (api.php) -->
+            <div class="category-group">
+                <div class="category-title">Ideas (api.php)</div>
+                <button class="endpoint-item" onclick="selectEndpoint('get-ideas-raw')">
+                    <span>Get All</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-idea-details')">
+                    <span>Get Details</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-idea-attachments')">
+                    <span>Get Attachments</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-ideas-category')">
+                    <span>Filter by Category</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+            </div>
+
             <!-- 5. Request Management -->
             <div class="category-group">
                 <div class="category-title">Requests</div>
@@ -774,6 +795,31 @@
                 </button>
                 <button class="endpoint-item" onclick="selectEndpoint('delete-request')">
                     <span>Delete</span>
+                    <span class="method-badge delete">DELETE</span>
+                </button>
+            </div>
+
+            <!-- 6. Sessions Management -->
+            <div class="category-group">
+                <div class="category-title">Sessions</div>
+                <button class="endpoint-item" onclick="selectEndpoint('get-sessions')">
+                    <span>Get Available</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-session-id')">
+                    <span>Get Details</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('book-session')">
+                    <span>Book Session</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('reschedule-session')">
+                    <span>Reschedule</span>
+                    <span class="method-badge put">PUT</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('cancel-session')">
+                    <span>Cancel</span>
                     <span class="method-badge delete">DELETE</span>
                 </button>
             </div>
@@ -1048,8 +1094,10 @@
                 bodyTemplate: {
                     title: 'Smart Logistics System',
                     description: 'AI-powered routing tool for regional distributors.',
-                    min_investment: 75000,
-                    category: 'Logistics'
+                    attachment: 'https://example.com/attachments/logistics.pdf',
+                    investmentRange: '100000',
+                    catID: 1,
+                    userID: 1
                 }
             },
             'update-idea': {
@@ -1074,6 +1122,46 @@
                 hasQueryParams: true,
                 queryParams: [
                     { name: 'id', label: 'Idea ID to Delete', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'get-ideas-raw': {
+                name: 'Whole Ideas Retrieving',
+                method: 'GET',
+                path: './routes/api.php/ideas',
+                description: 'Retrieves all business ideas via api.php route. Requires Bearer Token.',
+                requiresAuth: true
+            },
+            'get-idea-details': {
+                name: 'Idea Details By ID',
+                method: 'GET',
+                path: './routes/api.php/ideas',
+                description: 'Retrieves details for a specific idea via api.php route. Requires Bearer Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'id', label: 'Idea ID', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'get-idea-attachments': {
+                name: 'Idea Attachment By ID',
+                method: 'GET',
+                path: './routes/api.php/ideas/attachments',
+                description: 'Retrieves attachment documentations for a specific idea via api.php. Requires Bearer Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'id', label: 'Idea ID', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'get-ideas-category': {
+                name: 'Filter Ideas By Category',
+                method: 'GET',
+                path: './routes/api.php/ideas',
+                description: 'Filters business ideas by category ID via api.php route. Requires Bearer Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'category', label: 'Category ID', value: '1', placeholder: 'e.g. 1' }
                 ]
             },
             'create-request': {
@@ -1127,6 +1215,61 @@
                 hasQueryParams: true,
                 queryParams: [
                     { name: 'id', label: 'Request ID to Delete', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'get-sessions': {
+                name: 'Get Available Sessions',
+                method: 'GET',
+                path: './routes/api.php/sessions',
+                description: 'Retrieves all available consultancy sessions. Requires Bearer Token.',
+                requiresAuth: true
+            },
+            'get-session-id': {
+                name: 'Get Session Details',
+                method: 'GET',
+                path: './routes/api.php/session/{sessID}',
+                description: 'Retrieves specific session details. Requires Bearer Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'sessID', label: 'Session ID', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'book-session': {
+                name: 'Book Session',
+                method: 'POST',
+                path: './routes/api.php/session/book/{sessID}',
+                description: 'Books a specific available session. Requires Bearer Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'sessID', label: 'Session ID', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'reschedule-session': {
+                name: 'Reschedule Session',
+                method: 'PUT',
+                path: './routes/api.php/session/{sessID}',
+                description: 'Reschedules a booked session to a future date. Requires Bearer Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'sessID', label: 'Session ID', value: '1', placeholder: 'e.g. 1' }
+                ],
+                hasBody: true,
+                bodyTemplate: {
+                    dateTime: '2026-06-25 15:30:00'
+                }
+            },
+            'cancel-session': {
+                name: 'Cancel Session',
+                method: 'DELETE',
+                path: './routes/api.php/session/{sessID}',
+                description: 'Cancels a booked session. Requires Bearer Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'sessID', label: 'Session ID', value: '1', placeholder: 'e.g. 1' }
                 ]
             }
         };
@@ -1226,13 +1369,15 @@
 
             const config = endpoints[activeEndpointKey];
             
-            // Build URL with Query Params
+            // Build URL with Query/Path Params
             let url = config.path;
             if (config.hasQueryParams) {
                 const params = [];
                 config.queryParams.forEach(p => {
                     const val = document.getElementById(`param-${p.name}`).value;
-                    if (val !== '') {
+                    if (url.includes(`{${p.name}}`)) {
+                        url = url.replace(`{${p.name}}`, encodeURIComponent(val));
+                    } else if (val !== '') {
                         params.push(`${p.name}=${encodeURIComponent(val)}`);
                     }
                 });
@@ -1290,8 +1435,10 @@
                     // Read content
                     return res.text().then(text => {
                         let parsed;
+                        let isJson = false;
                         try {
                             parsed = JSON.parse(text);
+                            isJson = true;
                         } catch (e) {
                             parsed = text; // Plain text fallback
                         }
@@ -1304,7 +1451,17 @@
 
                         // Print Response Body
                         const viewer = document.getElementById('response-viewer-body');
-                        if (typeof parsed === 'object') {
+                        if (text.trim() === '') {
+                            viewer.textContent = JSON.stringify({
+                                "status": "200 OK",
+                                "message": "Server responded successfully but returned an empty body.",
+                                "possible_reasons": [
+                                    "The database table might be empty.",
+                                    "The database contains Arabic/non-UTF-8 characters, causing PHP's json_encode() to fail silently.",
+                                    "No output was generated by the PHP script."
+                                ]
+                            }, null, 2);
+                        } else if (isJson && typeof parsed === 'object') {
                             viewer.textContent = JSON.stringify(parsed, null, 2);
                         } else {
                             viewer.textContent = parsed;
