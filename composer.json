@@ -1,12 +1,17 @@
 {
-    "name": "growzy/backend",
+    "name": "dell/growzy",
+    "autoload": {
+        "psr-4": {
+            "Dell\\Growzy\\": "src/"
+        }
+    },
     "authors": [
         {
-            "name": "hana eid",
-            "email": "hanaeid136@gmail.com"
+            "name": "mayada451",
+            "email": "mayadai561@gmail.com"
         }
     ],
     "require": {
-        "firebase/php-jwt": "^7.1"
+        "predis/predis": "^3.5"
     }
 }
