@@ -20,6 +20,10 @@ function VerifyToken() {
     $token = $headers['Authorization'] ?? $headers['authorization'] ?? $headers['Authentication'] ?? '';
 
     if (!$token) {
+        $token = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
+    }
+
+    if (!$token) {
         response(401, "Token is required");
         exit;
     }

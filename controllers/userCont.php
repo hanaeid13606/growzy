@@ -6,11 +6,9 @@ require_once __DIR__ . '/../repos/userRepo.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 function getUserProfile() {
-    // 1. Verify the JWT token and get the decoded user payload
     $verifiedToken = VerifyToken();
     $userID = $verifiedToken->user_id;
 
-    // 2. Fetch user details from database
     $user = GetUserByIDRepo($userID);
 
     if ($user) {
@@ -21,7 +19,6 @@ function getUserProfile() {
 }
 
 function updateUserProfile($data) {
-    // 1. Verify the JWT token and get the decoded user payload
     $verifiedToken = VerifyToken();
     $userID = $verifiedToken->user_id;
 
@@ -30,7 +27,6 @@ function updateUserProfile($data) {
     $yearsOfExperience = $data['yearsOfExperience'] ?? null;
     $field = $data['field'] ?? null;
 
-    // 2. Validation
     if (empty($name) || empty($email)) {
         return response(400, "Name and Email are required fields");
     }
@@ -39,7 +35,6 @@ function updateUserProfile($data) {
         return response(400, "Invalid email format");
     }
 
-    // 3. Check if email is already taken by another account
     global $pdo;
     $stmt = $pdo->prepare("SELECT userID FROM user WHERE email = ? AND userID != ?");
     $stmt->execute([$email, $userID]);
@@ -51,7 +46,6 @@ function updateUserProfile($data) {
     $success = UpdateUserRepo($userID, $name, $email, $yearsOfExperience, $field);
 
     if ($success) {
-        // Return the updated profile
         $updatedUser = GetUserByIDRepo($userID);
         return response(200, "User profile updated successfully", $updatedUser);
     } else {
