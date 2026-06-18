@@ -59,13 +59,22 @@ echo json_encode([
 
 function getIdeasByPricecontroller()
 {
+    
+    if (!isset($_GET["price"]) || $_GET["price"] === "") {
+
+        $ideas = getAllIdeas(); 
+
+        http_response_code(200);
+        echo json_encode($ideas);
+        return;
+    }
+
+    
     $ideas = getIdeasByPrice($_GET["price"]);
 
     http_response_code(200);
-
     echo json_encode($ideas);
 }
-
 
 function deleteIdeacontroller()
 {
