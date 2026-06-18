@@ -731,45 +731,36 @@
             <!-- 4. Idea Management -->
             <div class="category-group">
                 <div class="category-title">Ideas</div>
-                <button class="endpoint-item" onclick="selectEndpoint('get-ideas-price')">
-                    <span>Get All / Price</span>
+                <button class="endpoint-item" onclick="selectEndpoint('create-idea')">
+                    <span>post idea</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('delete-idea')">
+                    <span>delete idea</span>
+                    <span class="method-badge delete">DELETE</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-ideas-raw')">
+                    <span>Whole Ideas Retrieving</span>
                     <span class="method-badge get">GET</span>
                 </button>
                 <button class="endpoint-item" onclick="selectEndpoint('get-idea-id')">
-                    <span>Get By ID</span>
-                    <span class="method-badge get">GET</span>
-                </button>
-                <button class="endpoint-item" onclick="selectEndpoint('create-idea')">
-                    <span>Create</span>
-                    <span class="method-badge post">POST</span>
-                </button>
-                <button class="endpoint-item" onclick="selectEndpoint('update-idea')">
-                    <span>Update</span>
-                    <span class="method-badge put">PUT</span>
-                </button>
-                <button class="endpoint-item" onclick="selectEndpoint('delete-idea')">
-                    <span>Delete</span>
-                    <span class="method-badge delete">DELETE</span>
-                </button>
-            </div>
-
-            <!-- Ideas (api.php) -->
-            <div class="category-group">
-                <div class="category-title">Ideas (api.php)</div>
-                <button class="endpoint-item" onclick="selectEndpoint('get-ideas-raw')">
-                    <span>Get All</span>
+                    <span>get idea by id</span>
                     <span class="method-badge get">GET</span>
                 </button>
                 <button class="endpoint-item" onclick="selectEndpoint('get-idea-details')">
-                    <span>Get Details</span>
+                    <span>Idea Details by ID</span>
                     <span class="method-badge get">GET</span>
                 </button>
                 <button class="endpoint-item" onclick="selectEndpoint('get-idea-attachments')">
-                    <span>Get Attachments</span>
+                    <span>Idea attachment by ID</span>
                     <span class="method-badge get">GET</span>
                 </button>
+                <button class="endpoint-item" onclick="selectEndpoint('delete-idea-by-id')">
+                    <span>delete idea by id</span>
+                    <span class="method-badge delete">DELETE</span>
+                </button>
                 <button class="endpoint-item" onclick="selectEndpoint('get-ideas-category')">
-                    <span>Filter by Category</span>
+                    <span>Filtering ideas by category id</span>
                     <span class="method-badge get">GET</span>
                 </button>
             </div>
@@ -1069,59 +1060,29 @@
                     { name: 'feedbackID', label: 'Feedback ID to Delete', value: '2', placeholder: 'e.g. 2' }
                 ]
             },
-            'get-ideas-price': {
-                name: 'Get Ideas By Price / Filter',
-                method: 'GET',
-                path: './routes/apiIdea.php',
-                description: 'Returns all business ideas or filters them by price/investment scale.'
-            },
-            'get-idea-id': {
-                name: 'Get Idea By ID',
-                method: 'GET',
-                path: './routes/apiIdea.php',
-                description: 'Retrieves specific business idea data using its ID.',
-                hasQueryParams: true,
-                queryParams: [
-                    { name: 'id', label: 'Idea ID', value: '1', placeholder: 'e.g. 1' }
-                ]
-            },
             'create-idea': {
-                name: 'Create Idea',
+                name: 'post idea',
                 method: 'POST',
                 path: './routes/apiIdea.php',
                 description: 'Submits a new business idea into the system.',
                 hasBody: true,
                 bodyTemplate: {
-                    title: 'Smart Logistics System',
-                    description: 'AI-powered routing tool for regional distributors.',
-                    attachment: 'https://example.com/attachments/logistics.pdf',
-                    investmentRange: '100000',
+                    title: 'Smart Farming App',
+                    description: 'Application for managing farms',
+                    attachment: 'image.png',
+                    investmentRange: 5000,
                     catID: 1,
                     userID: 1
                 }
             },
-            'update-idea': {
-                name: 'Update Idea',
-                method: 'PUT',
-                path: './routes/apiIdea.php',
-                description: 'Updates a business idea profile.',
-                hasBody: true,
-                bodyTemplate: {
-                    id: 1,
-                    title: 'Smart Logistics System Updated',
-                    description: 'Updated descriptions for regional distributor AI systems.',
-                    min_investment: 80000,
-                    category: 'Logistics'
-                }
-            },
             'delete-idea': {
-                name: 'Delete Idea',
+                name: 'delete idea',
                 method: 'DELETE',
                 path: './routes/apiIdea.php',
                 description: 'Deletes a business idea by ID.',
                 hasQueryParams: true,
                 queryParams: [
-                    { name: 'id', label: 'Idea ID to Delete', value: '1', placeholder: 'e.g. 1' }
+                    { name: 'id', label: 'Idea ID to Delete', value: '11', placeholder: 'e.g. 11' }
                 ]
             },
             'get-ideas-raw': {
@@ -1131,8 +1092,18 @@
                 description: 'Retrieves all business ideas via api.php route. Requires Bearer Token.',
                 requiresAuth: true
             },
+            'get-idea-id': {
+                name: 'get idea by id',
+                method: 'GET',
+                path: './routes/apiIdea.php',
+                description: 'Retrieves specific business idea data using its ID.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'id', label: 'Idea ID', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
             'get-idea-details': {
-                name: 'Idea Details By ID',
+                name: 'Idea Details by ID',
                 method: 'GET',
                 path: './routes/api.php/ideas',
                 description: 'Retrieves details for a specific idea via api.php route. Requires Bearer Token.',
@@ -1143,7 +1114,7 @@
                 ]
             },
             'get-idea-attachments': {
-                name: 'Idea Attachment By ID',
+                name: 'Idea attachment by ID',
                 method: 'GET',
                 path: './routes/api.php/ideas/attachments',
                 description: 'Retrieves attachment documentations for a specific idea via api.php. Requires Bearer Token.',
@@ -1153,8 +1124,27 @@
                     { name: 'id', label: 'Idea ID', value: '1', placeholder: 'e.g. 1' }
                 ]
             },
+            'delete-idea-by-id': {
+                name: 'delete idea by id',
+                method: 'DELETE',
+                path: './routes/apiIdea.php',
+                description: 'Deletes a business idea by ID.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'id', label: 'Idea ID to Delete', value: '12', placeholder: 'e.g. 12' }
+                ],
+                hasBody: true,
+                bodyTemplate: {
+                    title: 'Smart Farming App',
+                    description: 'Application for managing farms',
+                    attachment: 'image.png',
+                    investmentRange: 5000,
+                    catID: 1,
+                    userID: 2
+                }
+            },
             'get-ideas-category': {
-                name: 'Filter Ideas By Category',
+                name: 'Filtering ideas by category id',
                 method: 'GET',
                 path: './routes/api.php/ideas',
                 description: 'Filters business ideas by category ID via api.php route. Requires Bearer Token.',
