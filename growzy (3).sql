@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`adminID`, `name`, `email`, `password`) VALUES
-(1, 'ziad muzan', 'muzan@gmail.com', 56789);
+(1, 'ziad muzan', 'muzan@gmail.com','$2y$10$gMAVN1lS6ELoq2cPbQrGDOMsVR4bpHetAVjmdaWYHFT5YgwbeabfK');
 
 -- --------------------------------------------------------
 
