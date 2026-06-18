@@ -16,9 +16,12 @@ function register($data) {
         }
     }
 
+    $yearsOfExperience = $data['yearsOfExperience'] ?? 0;
+    $field = $data['field'] ?? '';
+
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $success = RegisterUser($name, $email, $hashedPassword, $role);
+    $success = RegisterUser($name, $email, $hashedPassword, $role, $yearsOfExperience, $field);
 
     if ($success) {
         return response(201, ['message' => 'User registered successfully']);
