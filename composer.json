@@ -12,6 +12,7 @@
         }
     ],
     "require": {
-        "predis/predis": "^3.5"
+        "predis/predis": "^3.5",
+        "firebase/php-jwt": "^7.1"
     }
 }
