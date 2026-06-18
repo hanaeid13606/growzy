@@ -41,4 +41,11 @@ function require_admin($verifiedToken) {
         exit;
     }
 }
+
+function require_user($verifiedToken) {
+    if ($verifiedToken->role === "admin") {
+        response(403, "Access denied: users only");
+        exit;
+    }
+}
 ?>

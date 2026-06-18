@@ -72,7 +72,7 @@ function CreateFeedback($data){
     $content = $data['content'] ?? '';
     $timestamp = $data['timestamp'] ?? '';
     $sessID= $data['sessID'] ?? '';
-    $userID= $verifiedToken['userID'];
+    $userID = $verifiedToken->user_id;
     $ideaID= $data['ideaID'] ?? '';
 
     if(empty($rating) || empty($content) || empty($timestamp) || empty($userID) || (empty($sessID) && empty($ideaID))){
