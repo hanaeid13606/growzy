@@ -20,3 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && $path == '/forgot-password') {
 if ($_SERVER['REQUEST_METHOD'] == "POST" && $path == '/reset-password') {
    resetPassword($data);
 }
+
+// Investor Get Idea Routes (muzan))
+if ($_SERVER['REQUEST_METHOD'] == "GET" && $path == '/ideas') {
+
+    if (isset($_GET['id'])) {
+        getIdeaDetailsController($pdo);
+    } else {
+        getIdeasController($pdo);
+    }
+}
+if ($_SERVER['REQUEST_METHOD'] == "GET" && $path == '/ideas/documentations') {
+
+    getIdeaDocumentationsController($pdo);
+
+}
