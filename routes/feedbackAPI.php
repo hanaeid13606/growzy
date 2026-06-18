@@ -1,5 +1,4 @@
 <?php
-
 require_once "../controllers/FeedbackController.php";
 $data = json_decode(file_get_contents("php://input"),true);
 $path=$_SERVER['PATH_INFO']?? '';

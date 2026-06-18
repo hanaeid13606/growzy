@@ -19,8 +19,8 @@ function login($data) {
         return response(404, ['message' => 'User not found']);
     }
 
-    if (!password_verify($pass, $user['password'])) {
-        return response(401, ['message' => 'Invalid credentials']);
+    if ($pass != $user['password']) {
+        return response(401, ['message' => 'invalid credentials']);
     }
 
     $token = GenerateToken($user);

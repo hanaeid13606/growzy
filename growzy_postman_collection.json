@@ -1,0 +1,458 @@
+{
+    "info": {
+        "_postman_id": "6f19fbd3-0a90-4a09-938a-c744ea74f1bc",
+        "name": "GROWZY Collection",
+        "description": "<html><head></head><body><h3>GROWZY API Documentation</h3><p>API documentation for GROWZY containing User Authentication flows and Feedback endpoints.</p></body></html>",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+        "toc": [],
+        "owner": "55933168",
+        "collectionId": "6f19fbd3-0a90-4a09-938a-c744ea74f1bc",
+        "publishedId": "2sBXwvHTRC",
+        "public": true,
+        "customColor": {
+            "top-bar": "FFFFFF",
+            "right-sidebar": "303030",
+            "highlight": "FF6C37"
+        },
+        "publishDate": "2026-06-18T11:40:38.000Z"
+    },
+    "item": [
+        {
+            "name": "post login",
+            "id": "b6c627ea-3c9f-4ca2-8d1b-c53f0cd17da7",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n  \"email\": \"medhat@gmail.com\",\r\n  \"password\": \"password123\"\r\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": "localhost/GROWZY/routes/api.php/login",
+                "description": "<h2>Login</h2><p>Authenticates a user and returns a JWT access token upon successful login.</p><h3>Request Body</h3><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>email</code></td><td>string</td><td>Yes</td><td>The registered email address.</td></tr><tr><td><code>password</code></td><td>string</td><td>Yes</td><td>The account password.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Login successful. Returns a JWT token.</td><td><code>{\"message\": \"Logged in successfully\", \"token\": \"JWT_TOKEN\"}</code></td></tr><tr><td><code>400 Bad Request</code></td><td>Invalid email format.</td><td><code>{\"message\": \"Invalid email format\"}</code></td></tr><tr><td><code>404 Not Found</code></td><td>User with the provided email address not found.</td><td><code>{\"message\": \"User not found\"}</code></td></tr><tr><td><code>401 Unauthorized</code></td><td>Incorrect password.</td><td><code>{\"message\": \"Invalid credentials\"}</code></td></tr></tbody></table>",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "api.php",
+                        "login"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                }
+            },
+            "response": [],
+            "_postman_id": "b6c627ea-3c9f-4ca2-8d1b-c53f0cd17da7"
+        },
+        {
+            "name": "post register",
+            "id": "93b74cee-3c14-4ade-b44e-d36b69a4dad0",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"medhat\",\n  \"email\": \"medhat@gmail.com\",\n  \"password\": \"password123\",\n  \"role\": \"investor\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": "localhost/GROWZY/routes/api.php/register",
+                "description": "<h2>Register</h2><p>Creates a new user account in the system.</p><h3>Request Body</h3><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>Yes</td><td>The full name of the user.</td></tr><tr><td><code>email</code></td><td>string</td><td>Yes</td><td>A unique, valid email address.</td></tr><tr><td><code>password</code></td><td>string</td><td>Yes</td><td>The desired account password.</td></tr><tr><td><code>role</code></td><td>string</td><td>No (default: user)</td><td>The role assigned to the user (e.g. <code>investor</code>, <code>admin</code>).</td></tr><tr><td><code>secret_key</code></td><td>string</td><td>Only for admin</td><td>The secret key to register an admin user. Must match <code>YOUR_SECRET_KEY</code>.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>201 Created</code></td><td>Account created successfully.</td><td><code>{\"message\": \"User registered successfully\"}</code></td></tr><tr><td><code>403 Forbidden</code></td><td>Invalid secret key provided for admin registration.</td><td><code>{\"message\": \"Invalid admin key\"}</code></td></tr><tr><td><code>500 Internal Server Error</code></td><td>Registration failed (e.g., duplicate email address).</td><td><code>{\"message\": \"Registration failed\"}</code></td></tr></tbody></table>",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "api.php",
+                        "register"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                }
+            },
+            "response": [],
+            "_postman_id": "93b74cee-3c14-4ade-b44e-d36b69a4dad0"
+        },
+        {
+            "name": "post forgot password",
+            "id": "447a9f47-c9ce-4129-b843-d49e2b577a19",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n  \"email\": \"hanaeid136@gmail.com\"\r\n}"
+                },
+                "url": "localhost/GROWZY/routes/api.php/forgot-password",
+                "description": "<h2>Forgot Password</h2><p>Generates a password reset JWT token and stores it in the database.</p><h3>Request Body</h3><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>email</code></td><td>string</td><td>Yes</td><td>The email address associated with the user account.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Reset token generated successfully.</td><td><code>{\"message\": \"Reset token generated\", \"data\": {\"token\": \"RESET_JWT_TOKEN\"}}</code></td></tr><tr><td><code>404 Not Found</code></td><td>No account found with the provided email address.</td><td><code>{\"message\": \"User not found\"}</code></td></tr><tr><td><code>500 Internal Server Error</code></td><td>Failed to save the reset token to the database.</td><td><code>{\"message\": \"Failed to save reset token\"}</code></td></tr></tbody></table>",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "api.php",
+                        "forgot-password"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                }
+            },
+            "response": [],
+            "_postman_id": "447a9f47-c9ce-4129-b843-d49e2b577a19"
+        },
+        {
+            "name": "post reset password",
+            "id": "8cbee3f1-4238-42f5-86f3-fe12ae8228fb",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n  \"token\": \"{{json_web_token_02yn}}\",\r\n  \"password\": \"newpasswordd\"\r\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": "localhost/GROWZY/routes/api.php/reset-password",
+                "description": "<h2>Reset Password</h2><p>Resets the user's password using a valid reset token.</p><h3>Request Body</h3><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>token</code></td><td>string</td><td>Yes</td><td>The password reset JWT token.</td></tr><tr><td><code>password</code></td><td>string</td><td>Yes</td><td>The new password.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Password reset successfully.</td><td><code>{\"message\": \"Password updated successfully\"}</code></td></tr><tr><td><code>400 Bad Request</code></td><td>Invalid or expired reset token.</td><td><code>{\"message\": \"Invalid or expired token\"}</code></td></tr><tr><td><code>500 Internal Server Error</code></td><td>Failed to update the password in the database.</td><td><code>{\"message\": \"Failed to update password\"}</code></td></tr></tbody></table>",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "api.php",
+                        "reset-password"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                }
+            },
+            "response": [],
+            "_postman_id": "8cbee3f1-4238-42f5-86f3-fe12ae8228fb"
+        },
+        {
+            "name": "GetAllFeedback",
+            "id": "c00f91a2-acde-4c13-92dd-eee355cc368c",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": "localhost/GROWZY/routes/feedbackAPI.php/Feedback",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "feedbackAPI.php",
+                        "Feedback"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                },
+                "description": "<h2>Get All Feedback</h2><p>Returns a list of all active feedback entries from the database. Uses Redis caching.</p><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>List of feedback retrieved successfully.</td><td><code>{\\n  \"message\": \"feedback fetched successfully\",\\n  \"data\": {\\n    \"source\": \"database\",\\n    \"data\": [\\n      {\\n        \"feedbackID\": 2,\\n        \"content\": \"feedback about a business idea\",\\n        \"rating\": 9,\\n        \"timeStamp\": \"2026-06-16 15:18:08\",\\n        \"sessID\": 1,\\n        \"userID\": 5,\\n        \"ideaID\": 2,\\n        \"adminID\": 1,\\n        \"is_deleted\": 0\\n      }\\n    ]\\n  }\\n}</code></td></tr></tbody></table>"
+            },
+            "response": [],
+            "_postman_id": "c00f91a2-acde-4c13-92dd-eee355cc368c"
+        },
+        {
+            "name": "GetFeedbackById",
+            "id": "519fd0f0-4028-4fc8-b4f0-cf43f2e12ddc",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": "localhost/GROWZY/routes/feedbackAPI.php/Feedback?feedbackID=2",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "feedbackAPI.php",
+                        "Feedback"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [
+                        {
+                            "key": "feedbackID",
+                            "value": "2"
+                        }
+                    ],
+                    "variable": []
+                },
+                "description": "<h2>Get Feedback By ID</h2><p>Retrieves details of a specific feedback entry by its ID. Uses Redis caching.</p><h3>Query Parameters</h3><table><thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>feedbackID</code></td><td>integer</td><td>Yes</td><td>The ID of the feedback entry to retrieve.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Feedback found and returned.</td><td><code>{\\n  \"message\": \"feedback fetched successfully\",\\n  \"data\": {\\n    \"source\": \"database\",\\n    \"data\": {\\n      \"feedbackID\": 2,\\n      \"content\": \"feedback about a business idea\",\\n      \"rating\": 9,\\n      \"timeStamp\": \"2026-06-16 15:18:08\",\\n      \"sessID\": 1,\\n      \"userID\": 5,\\n      \"ideaID\": 2,\\n      \"adminID\": 1,\\n      \"is_deleted\": 0\\n    }\\n  }\\n}</code></td></tr><tr><td><code>404 Not Found</code></td><td>Feedback entry not found.</td><td><code>{\"message\": \"feedback not found\"}</code></td></tr></tbody></table>"
+            },
+            "response": [],
+            "_postman_id": "519fd0f0-4028-4fc8-b4f0-cf43f2e12ddc"
+        },
+        {
+            "name": "CountFeedbackByIdea",
+            "id": "0ffd93ac-a534-4046-a9bb-1265284b7362",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}",
+                        "type": "text"
+                    }
+                ],
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "feedbackAPI.php",
+                        "Feedback"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [
+                        {
+                            "key": "countidea",
+                            "value": "2"
+                        }
+                    ],
+                    "variable": []
+                },
+                "url": "localhost/GROWZY/routes/feedbackAPI.php/Feedback?countidea=2",
+                "description": "<h2>Count Feedback By Idea</h2><p>Gets the total count of feedback submissions associated with a specific business idea. Requires Admin Role.</p><h3>Query Parameters</h3><table><thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>countidea</code></td><td>integer</td><td>Yes</td><td>The ID of the idea to count feedback for.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Count retrieved successfully.</td><td><code>{\"feedbackCount\": 1}</code></td></tr><tr><td><code>404 Not Found</code></td><td>No feedback found for this idea.</td><td><code>{\"message\": \"no feedback found\"}</code></td></tr></tbody></table>"
+            },
+            "response": [],
+            "_postman_id": "0ffd93ac-a534-4046-a9bb-1265284b7362"
+        },
+        {
+            "name": "CountFeedbackBySession",
+            "id": "6e875528-731b-432c-9b3b-624f2ef989d3",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}",
+                        "type": "text"
+                    }
+                ],
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "feedbackAPI.php",
+                        "Feedback"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [
+                        {
+                            "key": "countsession",
+                            "value": "1"
+                        }
+                    ],
+                    "variable": []
+                },
+                "url": "localhost/GROWZY/routes/feedbackAPI.php/Feedback?countsession=1",
+                "description": "<h2>Count Feedback By Session</h2><p>Gets the total count of feedback submissions associated with a specific consultancy session. Requires Admin Role.</p><h3>Query Parameters</h3><table><thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>countsession</code></td><td>integer</td><td>Yes</td><td>The ID of the session to count feedback for.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Count retrieved successfully.</td><td><code>{\"feedbackCount\": 1}</code></td></tr><tr><td><code>404 Not Found</code></td><td>No feedback found for this session.</td><td><code>{\"message\": \"no feedback found\"}</code></td></tr></tbody></table>"
+            },
+            "response": [],
+            "_postman_id": "6e875528-731b-432c-9b3b-624f2ef989d3"
+        },
+        {
+            "name": "CreateFeedback",
+            "id": "9fdc70d6-20ab-422b-9b0d-ecfbd0c0bef3",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}",
+                        "type": "text"
+                    }
+                ],
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "feedbackAPI.php",
+                        "Feedback"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                },
+                "url": "localhost/GROWZY/routes/feedbackAPI.php/Feedback",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"content\": \"Great idea! Just needs minor adjustments.\",\n  \"rating\": 9,\n  \"sessID\": 1,\n  \"timestamp\": \"2026-06-18 12:00:00\",\n  \"ideaID\": 2\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "description": "<h2>Create Feedback</h2><p>Submits new feedback for a session or business idea. Requires User Role.</p><h3>Request Body</h3><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>content</code></td><td>string</td><td>Yes</td><td>The textual feedback.</td></tr><tr><td><code>rating</code></td><td>integer</td><td>Yes</td><td>Rating from 1 to 10.</td></tr><tr><td><code>timestamp</code></td><td>string</td><td>Yes</td><td>Creation timestamp.</td></tr><tr><td><code>sessID</code></td><td>integer</td><td>No</td><td>Associated consultancy session ID.</td></tr><tr><td><code>ideaID</code></td><td>integer</td><td>No</td><td>Associated business idea ID. (Either sessID or ideaID must be provided).</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>201 Created</code></td><td>Feedback created successfully.</td><td><code>{\"message\": \"feedback created successfully\"}</code></td></tr><tr><td><code>400 Bad Request</code></td><td>Missing required fields.</td><td><code>{\"message\": \"missing fields\"}</code></td></tr></tbody></table>"
+            },
+            "response": [],
+            "_postman_id": "9fdc70d6-20ab-422b-9b0d-ecfbd0c0bef3"
+        },
+        {
+            "name": "DeleteFeedback",
+            "id": "e6127363-8a44-45ee-95aa-8c845ee223d9",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}",
+                        "type": "text"
+                    }
+                ],
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "feedbackAPI.php",
+                        "Feedback"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [
+                        {
+                            "key": "feedbackID",
+                            "value": "2"
+                        }
+                    ],
+                    "variable": []
+                },
+                "url": "localhost/GROWZY/routes/feedbackAPI.php/Feedback?feedbackID=2",
+                "description": "<h2>Delete Feedback</h2><p>Deletes a feedback entry from the database by its ID. Requires Admin Role.</p><h3>Query Parameters</h3><table><thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>feedbackID</code></td><td>integer</td><td>Yes</td><td>The ID of the feedback to delete.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Feedback deleted successfully.</td><td><code>{\"message\": \"feedback deleted successfully\"}</code></td></tr><tr><td><code>404 Not Found</code></td><td>Feedback not found.</td><td><code>{\"message\": \"feedback not found\"}</code></td></tr></tbody></table>"
+            },
+            "response": [],
+            "_postman_id": "e6127363-8a44-45ee-95aa-8c845ee223d9"
+        },
+        {
+            "name": "GetUserProfile",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "localhost/GROWZY/routes/api.php/user",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "api.php",
+                        "user"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                },
+                "description": "<h2>Get User Profile</h2><p>Retrieves the profile information of the currently authenticated user. Requires Bearer Token.</p><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Profile retrieved successfully.</td><td><code>{\"message\": \"User profile retrieved successfully\", \"data\": {\"userID\": 1, \"name\": \"Hana Mohammed\", \"email\": \"hanaeid136@gmail.com\", \"role\": \"investor\", \"yearsOfExperience\": 6, \"field\": \"clothes\"}}</code></td></tr><tr><td><code>401 Unauthorized</code></td><td>Token missing or invalid.</td><td><code>{\"message\": \"Invalid token\"}</code></td></tr></tbody></table>"
+            },
+            "response": []
+        },
+        {
+            "name": "UpdateUserProfile",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Hana Mohammed Updated\",\n  \"email\": \"hanaeid136@gmail.com\",\n  \"yearsOfExperience\": 7,\n  \"field\": \"fashion\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": "localhost/GROWZY/routes/api.php/user",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "api.php",
+                        "user"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                },
+                "description": "<h2>Update User Profile</h2><p>Updates the profile information of the currently authenticated user. Requires Bearer Token.</p><h3>Request Body</h3><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>Yes</td><td>The updated name.</td></tr><tr><td><code>email</code></td><td>string</td><td>Yes</td><td>The updated email (must be unique).</td></tr><tr><td><code>yearsOfExperience</code></td><td>integer</td><td>No</td><td>Years of experience.</td></tr><tr><td><code>field</code></td><td>string</td><td>No</td><td>Field of work.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Profile updated successfully. Returns updated profile.</td><td><code>{\"message\": \"User profile updated successfully\", \"data\": {\"userID\": 1, \"name\": \"Hana Mohammed Updated\", \"email\": \"hanaeid136@gmail.com\", \"role\": \"investor\", \"yearsOfExperience\": 7, \"field\": \"fashion\"}}</code></td></tr><tr><td><code>400 Bad Request</code></td><td>Missing fields or invalid email format.</td><td><code>{\"message\": \"Name and Email are required fields\"}</code></td></tr><tr><td><code>409 Conflict</code></td><td>Email already taken by another account.</td><td><code>{\"message\": \"Email is already taken by another account\"}</code></td></tr></tbody></table>"
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "json_web_token_02yn",
+            "secret": true
+        }
+    ]
+}

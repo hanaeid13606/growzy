@@ -20,6 +20,10 @@ function VerifyToken() {
     $token = $headers['Authorization'] ?? $headers['authorization'] ?? $headers['Authentication'] ?? '';
 
     if (!$token) {
+        $token = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
+    }
+
+    if (!$token) {
         response(401, "Token is required");
         exit;
     }
@@ -38,6 +42,13 @@ function VerifyToken() {
 function require_admin($verifiedToken) {
     if ($verifiedToken->role !== "admin") {
         response(403, "Access denied: admin only");
+        exit;
+    }
+}
+
+function require_user($verifiedToken) {
+    if ($verifiedToken->role === "admin") {
+        response(403, "Access denied: users only");
         exit;
     }
 }
