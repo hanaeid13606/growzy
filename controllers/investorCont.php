@@ -46,9 +46,9 @@ function getIdeaDocumentationsController($pdo) {
     $docs = getIdeaDocsRepo($pdo, $id);
 
     if ($docs) {
-        response(200, "Documentations retrieved", $docs);
+        response(200, "Attachment retrieved", $docs);
     } else {
-        response(404, "No documentations found");
+        response(404, "No attachment found");
     }
 }
 ?>
