@@ -1,0 +1,1094 @@
+{
+  "info": {
+    "_postman_id": "6f19fbd3-0a90-4a09-938a-c744ea74f1bc",
+    "name": "My Collection",
+    "description": "### Welcome to Postman! This is your first collection.\n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests  \n• Test your API in real-world scenarios  \n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55933168",
+    "_collection_link": "https://go.postman.co/collection/55933168-6f19fbd3-0a90-4a09-938a-c744ea74f1bc?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "authentication",
+      "item": [
+        {
+          "name": "post login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"maram@gmail.com\",\r\n  \"password\": \"20062006\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost/GROWZY/routes/api.php/login",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "api.php",
+                "login"
+              ]
+            },
+            "description": "## Login\n\nAuthenticates a user and returns an access token upon successful login.\n\n### Request Body\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| `email` | string | Yes | The registered email address of the user. |\n| `password` | string | Yes | The user's account password. |\n\n### Example Request Body\n\n``` json\n{\n  \"email\": \"medhat@gmail.com\",\n  \"password\": \"password123\"\n}\n\n ```\n\n### Responses\n\n| Status | Description |\n| --- | --- |\n| `200 OK` | Login successful. Returns an authentication token. |\n| `401 Unauthorized` | Invalid email or password. |\n| `422 Unprocessable Entity` | Validation error — missing or malformed fields. |"
+          },
+          "response": []
+        },
+        {
+          "name": "post register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"jana ayoub\",\r\n  \"email\": \"jana1@gmail.com\",\r\n  \"password\": \"12345\",\r\n  \"role\": \"investor\",\r\n  \"yearsOfExperience\":\"5\",\r\n  \"field\":\"clothes\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost/GROWZY/routes/api.php/register",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "api.php",
+                "register"
+              ]
+            },
+            "description": "## Register\n\nCreates a new user account in the system.\n\n### Request Body\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| `name` | string | Yes | The full name of the user. |\n| `email` | string | Yes | A unique, valid email address for the account. |\n| `password` | string | Yes | The desired account password. |\n| `role` | string | Yes | The role assigned to the user (e.g. `investor`). |\n\n### Example Request Body\n\n```json\n{\n  \"name\": \"medhat\",\n  \"email\": \"medhat@gmail.com\",\n  \"password\": \"password123\",\n  \"role\": \"investor\"\n}\n```\n\n### Responses\n\n| Status | Description |\n|--------|-------------|\n| `201 Created` | Account created successfully. |\n| `409 Conflict` | An account with the provided email already exists. |\n| `422 Unprocessable Entity` | Validation error — missing or malformed fields. |"
+          },
+          "response": []
+        },
+        {
+          "name": "post forgot password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"hanaeid136@gmail.com\"\r\n}"
+            },
+            "url": {
+              "raw": "localhost/GROWZY/routes/api.php/forgot-password",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "api.php",
+                "forgot-password"
+              ]
+            },
+            "description": "## Forgot Password\n\nInitiates the password reset flow by sending a password reset link to the provided email address.\n\n### Request Body\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| `email` | string | Yes | The email address associated with the user's account. |\n\n### Example Request Body\n\n```json\n{\n  \"email\": \"hanaeid136@gmail.com\"\n}\n```\n\n### Responses\n\n| Status | Description |\n|--------|-------------|\n| `200 OK` | Reset link sent successfully to the provided email. |\n| `404 Not Found` | No account found with the provided email address. |\n| `422 Unprocessable Entity` | Validation error — missing or malformed email field. |"
+          },
+          "response": []
+        },
+        {
+          "name": "post reset password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"token\": \"{{json_web_token_02yn}}\",\r\n  \"password\": \"newpasswordd\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost/GROWZY/routes/api.php/reset-password",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "api.php",
+                "reset-password"
+              ]
+            },
+            "description": "## Reset Password\n\nResets the user's password using a valid reset token. The token is typically obtained from the reset link sent via the Forgot Password endpoint.\n\n### Request Body\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| `token` | string | Yes | The password reset token received via email. Can be referenced using the `{{json_web_token_02yn}}` variable. |\n| `password` | string | Yes | The new password to set for the account. |\n\n### Example Request Body\n\n``` json\n{\n  \"token\": \"{{json_web_token_02yn}}\",\n  \"password\": \"newpasswordd\"\n}\n\n ```\n\n### Responses\n\n| Status | Description |\n| --- | --- |\n| `200 OK` | Password reset successfully. |\n| `400 Bad Request` | Invalid or expired reset token. |\n| `422 Unprocessable Entity` | Validation error — missing or malformed fields. |"
+          },
+          "response": []
+        },
+        {
+          "name": "post login admin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"tarek@gmail.com\",\r\n  \"password\": \"adminpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost/growzy-clone/routes/api.php/login",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy-clone",
+                "routes",
+                "api.php",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post register admin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Tarek\",\r\n  \"email\": \"tarek@gmail.com\",\r\n  \"password\": \"adminpassword\",\r\n  \"role\": \"admin\",\r\n  \"secret_key\": \"YOUR_SECRET_KEY\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost/growzy-clone/routes/api.php/register",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy-clone",
+                "routes",
+                "api.php",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update user",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0feq}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Hana Mohammed Updated\",\r\n  \"email\": \"hanaeid1365@gmail.com\",\r\n  \"yearsOfExperience\": 7,\r\n  \"field\": \"fashion\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost/GROWZY/routes/api.php/user",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "api.php",
+                "user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get user profile Copy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0feq}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost/GROWZY/routes/api.php/user",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "api.php",
+                "user"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "feedback",
+      "item": [
+        {
+          "name": "GetAllFeedback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost/GROWZY/routes/feedbackAPI.php/Feedback",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "feedbackAPI.php",
+                "Feedback"
+              ]
+            },
+            "description": "GET GetAllFeedback\n\nDescription:  \nRetrieve all feedback records.\n\nURL:  \n/feedbackAPI.php/Feedback\n\nAuthorization:  \nNone\n\nParameters:  \nNone\n\nSuccess Response:  \nStatus: 200 OK"
+          },
+          "response": []
+        },
+        {
+          "name": "CountFeedbackByIdea",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost/GROWZY/routes/FeedbackAPI.php/Feedback?countidea=1",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "FeedbackAPI.php",
+                "Feedback"
+              ],
+              "query": [
+                {
+                  "key": "countidea",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "GET CountFeedbackByIdea\n\nDescription:\n\nretrieve the number of feedback records for a specific idea\n\nURL:\n\n/feedbackAPI.php/Feedback?countidea=1  \nAuth:\n\nBearer Token (Admin)  \nResponse: 200 + { ideaID, CountFeedbackIdea }"
+          },
+          "response": []
+        },
+        {
+          "name": "CreateFeedback",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODE4MTM1OTUsImV4cCI6MTc4MTgxNzE5NSwidXNlcl9pZCI6Nywicm9sZSI6ImludmVzdG9yIn0.EJAC6JTKGoiZj4EAz4W1kLiZZcHy2Ip86bv-yzRq7QI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\":5,\r\n    \"content\":\"Excellent session\",\r\n    \"timestamp\":\"2026-06-18 20:30:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost/GROWZY/routes/feedbackAPI.php/Feedback?ideaID=2",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "feedbackAPI.php",
+                "Feedback"
+              ],
+              "query": [
+                {
+                  "key": "ideaID",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "POST CreateFeedback\n\nDescription:\n\ncreate a new feedback  \nURL:\n\n/feedbackAPI.php/Feedback  \nAuth:\n\nBearer Token (User)  \nBody: {  \n\"rating\": 5,  \n\"content\": \"Excellent session\",  \n\"timestamp\": \"2026-06-18 20:30:00\"  \n}  \nResponse: 201 created / 400 missing fields"
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteFeedback",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost/GROWZY/routes/feedbackAPI.php/Feedback?feedbackID=5",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "feedbackAPI.php",
+                "Feedback"
+              ],
+              "query": [
+                {
+                  "key": "feedbackID",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "DELETE DeleteFeedback\n\nDescription:\n\ndelete a feedback record by its ID\n\nURL:\n\n/feedbackAPI.php/Feedback?feedbackID=5  \nAuth:\n\nBearer Token (Admin)  \nResponse: 200 deleted / 404 not found"
+          },
+          "response": []
+        },
+        {
+          "name": "GetFeedbackById",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost/GROWZY/routes/feedbackAPI.php/Feedback?feedbackID=2",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "feedbackAPI.php",
+                "Feedback"
+              ],
+              "query": [
+                {
+                  "key": "feedbackID",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "GET GetFeedbackById\n\nDescription:  \nRetrieve a feedback by its id.\n\nURL:  \n/feedbackAPI.php/Feedback?feedbackID=2\n\nAuthorization:  \nNone\n\nParameters:  \nfeedbackID (integer) - Feedback ID\n\nSuccess Response:  \nStatus: 200 OK"
+          },
+          "response": []
+        },
+        {
+          "name": "CountFeedbackBySession",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost/GROWZY/routes/feedbackAPI.php/Feedback?countsession=1",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "GROWZY",
+                "routes",
+                "feedbackAPI.php",
+                "Feedback"
+              ],
+              "query": [
+                {
+                  "key": "countsession",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "GET CountFeedbackBySession\n\nDescription:\n\nretrieve the number of feedback records for a specific session\n\nURL:\n\n/feedbackAPI.php/Feedback?countisession=1  \nAuth:\n\nBearer Token (Admin)  \nResponse: 200 + { sessID, CountFeedbackSession }"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "consultancy session",
+      "item": [
+        {
+          "name": "cancel session",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/session/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "session",
+                "1"
+              ]
+            },
+            "description": "## Cancel Session\n\nCancels a previously booked or scheduled session for a user. This endpoint allows clients to programmatically cancel an active session by providing the session's unique identifier.\n\n---\n\n### When to Use\n\nUse this endpoint when a user wants to cancel a session they have already booked. This is typically triggered from a cancellation flow in the client application (e.g., a \"Cancel Session\" button on a booking details page).\n\n---\n\n### Path Variables\n\n| Variable | Type | Required | Description |\n| --- | --- | --- | --- |\n| `id` | string | ✅ Yes | The unique identifier of the session to be cancelled. |\n\n> **Example:** `/sessions/:id/cancel` \n  \n\n---\n\n### Query Parameters\n\nNo query parameters are required for this endpoint.\n\n---\n\n### Expected Responses\n\n#### ✅ Success — `200 OK`\n\nThe session was successfully cancelled.\n\n``` json\n{\n  \"message\": \"Session cancelled successfully.\",\n  \"sessionId\": \"abc123\",\n  \"status\": \"cancelled\"\n}\n\n ```\n\n#### ❌ Not Found — `404 Not Found`\n\nThe session with the provided ID does not exist.\n\n``` json\n{\n  \"error\": \"Session not found.\",\n  \"sessionId\": \"abc123\"\n}\n\n ```\n\n#### ❌ Conflict — `409 Conflict`\n\nThe session has already been cancelled or cannot be cancelled in its current state.\n\n``` json\n{\n  \"error\": \"Session cannot be cancelled. It may have already been cancelled or completed.\"\n}\n\n ```\n\n#### ❌ Unauthorized — `401 Unauthorized`\n\nThe request is missing or contains an invalid authentication token.\n\n``` json\n{\n  \"error\": \"Unauthorized. Please provide a valid token.\"\n}\n\n ```\n\n---\n\n### Notes\n\n- Ensure the session ID is valid and belongs to the authenticated user before making this request.\n    \n- Once cancelled, the session status cannot be reverted. Use the reschedule endpoint if the user wants to change the session time instead of cancelling it."
+          },
+          "response": []
+        },
+        {
+          "name": "reschedule by id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"dateTime\":\"2026-08-20 15:00:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/session/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "session",
+                "1"
+              ]
+            },
+            "description": "Reschedules an existing session by its ID.\n\n**Method:** PUT  \n**Endpoint:** `/session/{id}`\n\n### Path Parameters\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `id` | integer | The unique ID of the session to reschedule. |\n\n### Request Headers\n| Header | Value | Description |\n|--------|-------|-------------|\n| `Authorization` | `Bearer <token>` | A valid JWT bearer token for the authenticated user. |\n\n### Request Body\nProvide a JSON object with the new date and time for the session.\n\n```json\n{\n    \"dateTime\": \"2026-08-20 15:00:00\"\n}\n```\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| `dateTime` | string | Yes | The new date and time for the session in `YYYY-MM-DD HH:MM:SS` format. |\n\n### Response\nReturns the updated session details on success, or an error message if the session is not found or the user is not authorized."
+          },
+          "response": []
+        },
+        {
+          "name": "details by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/session/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "session",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "booked available session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/session/book/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "session",
+                "book",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get available sessions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/sessions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "sessions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "reschedule by id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"dateTime\":\"2026-08-20 15:00:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/session/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "session",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ideas",
+      "item": [
+        {
+          "name": "post idea",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Smart Farming App\",\r\n    \"description\": \"Application for managing farms\",\r\n    \"attachment\": \"image.png\",\r\n    \"investmentRange\": 5000,\r\n    \"catID\": 1,\r\n    \"userID\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost/growzy/routes/apiIdea.php?",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "apiIdea.php"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete idea",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost/growzy/routes/apiIdea.php?id=11",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "apiIdea.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Whole Ideas Retrieving",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODE3OTEwODksImV4cCI6MTc4MTc5NDY4OSwidXNlcl9pZCI6Miwicm9sZSI6ImFkbWluIn0.zz8kc_aelc_-qIPOeplmQsfzzfDxWfAuaqCbcjuT9BY",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/ideas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "ideas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get idea by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost/growzy/routes/apiIdea.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "apiIdea.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Idea Details by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODE3OTEwODksImV4cCI6MTc4MTc5NDY4OSwidXNlcl9pZCI6Miwicm9sZSI6ImFkbWluIn0.zz8kc_aelc_-qIPOeplmQsfzzfDxWfAuaqCbcjuT9BY",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/ideas?id=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "ideas"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Idea attachment by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODE3OTEwODksImV4cCI6MTc4MTc5NDY4OSwidXNlcl9pZCI6Miwicm9sZSI6ImFkbWluIn0.zz8kc_aelc_-qIPOeplmQsfzzfDxWfAuaqCbcjuT9BY",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/ideas/attachments?id=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "ideas",
+                "attachments"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete idea by id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Smart Farming App\",\r\n    \"description\": \"Application for managing farms\",\r\n    \"attachment\": \"image.png\",\r\n    \"investmentRange\": 5000,\r\n    \"catID\": 1,\r\n    \"userID\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost/growzy/routes/apiIdea.php?id=12",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "apiIdea.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "12"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filtering ideas by category id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODE3OTEwODksImV4cCI6MTc4MTc5NDY4OSwidXNlcl9pZCI6Miwicm9sZSI6ImFkbWluIn0.zz8kc_aelc_-qIPOeplmQsfzzfDxWfAuaqCbcjuT9BY",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost/growzy/routes/api.php/ideas?category=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "api.php",
+                "ideas"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "requests endpoints",
+      "item": [
+        {
+          "name": "Create Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"description\": \"test request\",\r\n  \"documentation\": \"file.pdf\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost/growzy/routes/requestRoutes.php?ideaId=5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "requestRoutes.php"
+              ],
+              "query": [
+                {
+                  "key": "ideaId",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "StartFragment\n\n# 1\\. Create Request\n\nCreates a new request for a specific idea.\n\n### Endpoint\n\n```\nPOST /requestRoutes.php?ideaId={ideaId}\n\n ```\n\n### Example URL\n\n```\nhttp://localhost/growzy/routes/requestRoutes.php?ideaId=5\n\n ```\n\n### Headers\n\n| Key | Value |\n| --- | --- |\n| Content-Type | application/json |\n\n### Request Body\n\n```\n{\n  \"description\": \"test request\",\n  \"documentation\": \"file.pdf\"\n}\n\n ```\n\n### Success Response\n\n**Status Code:** `201 Created`\n\n```\n{\n  \"message\": \"Request created successfully\"\n}\n\n ```\n\n### Error Responses\n\n**400 Bad Request**\n\n```\n{\n  \"error\": \"Missing required fields\"\n}\n\n ```\n\n**404 Not Found**\n\n```\n{\n  \"error\": \"Idea not found\"\n}\n\n ```\n\nEndFragment"
+          },
+          "response": []
+        },
+        {
+          "name": "All Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost/growzy/routes/requestRoutes.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "requestRoutes.php"
+              ]
+            },
+            "description": "StartFragment\n\n# 2\\. Get All Requests\n\nRetrieves all requests.\n\n### Endpoint\n\n```\nGET /requestRoutes.php\n\n ```\n\n### Example URL\n\n```\nhttp://localhost/growzy/routes/requestRoutes.php\n\n ```\n\n### Headers\n\nNone required.\n\n### Request Body\n\nNone.\n\n### Success Response\n\n**Status Code:** `200 OK`\n\n```\n[\n  {\n    \"requestID\": 1,\n    \"ideaID\": 5,\n    \"description\": \"test request\",\n    \"documentation\": \"file.pdf\",\n    \"status\": \"Pending\"\n  },\n  {\n    \"requestID\": 2,\n    \"ideaID\": 7,\n    \"description\": \"another request\",\n    \"documentation\": \"cv.pdf\",\n    \"status\": \"Approved\"\n  }\n]\n\n ```\n\nEndFragment"
+          },
+          "response": []
+        },
+        {
+          "name": "Requests by ideaId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost/growzy/routes/requestRoutes.php?ideaId=5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "requestRoutes.php"
+              ],
+              "query": [
+                {
+                  "key": "ideaId",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "StartFragment\n\n# 3\\. Get Requests by Idea ID\n\nRetrieves all requests associated with a specific idea.\n\n### Endpoint\n\n```\nGET /requestRoutes.php?ideaId={ideaId}\n\n ```\n\n### Example URL\n\n```\nhttp://localhost/growzy/routes/requestRoutes.php?ideaId=5\n\n ```\n\n### Headers\n\nNone required.\n\n### Request Body\n\nNone.\n\n### Success Response\n\n**Status Code:** `200 OK`\n\n```\n[\n  {\n    \"requestID\": 1,\n    \"ideaID\": 5,\n    \"description\": \"test request\",\n    \"documentation\": \"file.pdf\",\n    \"status\": \"Pending\"\n  }\n]\n\n ```\n\n### Error Response\n\n**404 Not Found**\n\n```\n{\n  \"error\": \"No requests found\"\n}\n\n ```\n\nEndFragment"
+          },
+          "response": []
+        },
+        {
+          "name": "Request by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost/growzy/routes/requestRoutes.php?id=2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "requestRoutes.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "StartFragment\n\n# 4\\. Get Request by ID\n\nRetrieves a single request using its ID.\n\n### Endpoint\n\n```\nGET /requestRoutes.php?id={id}\n\n ```\n\n### Example URL\n\n```\nhttp://localhost/growzy/routes/requestRoutes.php?id=2\n\n ```\n\n### Headers\n\nNone required.\n\n### Request Body\n\nNone.\n\n### Success Response\n\n**Status Code:** `200 OK`\n\n```\n{\n  \"requestID\": 2,\n  \"ideaID\": 5,\n  \"description\": \"test request\",\n  \"documentation\": \"file.pdf\",\n  \"status\": \"Pending\"\n}\n\n ```\n\n### Error Response\n\n**404 Not Found**\n\n```\n{\n  \"error\": \"Request not found\"\n}\n\n ```\n\nEndFragment"
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost/growzy/routes/requestRoutes.php?id=2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "growzy",
+                "routes",
+                "requestRoutes.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "StartFragment\n\n# 5\\. Delete Request (Soft Delete)\n\nMarks a request as deleted without removing it permanently.\n\n### Endpoint\n\n```\nDELETE /requestRoutes.php?id={id}\n\n ```\n\n### Example URL\n\n```\nhttp://localhost/growzy/routes/requestRoutes.php?id=2\n\n ```\n\n### Headers\n\nNone required.\n\n### Request Body\n\nNone.\n\n### Success Response\n\n**Status Code:** `200 OK`\n\n```\n{\n  \"message\": \"Deleted successfully\"\n}\n\n ```\n\n### Error Response\n\n**404 Not Found**\n\n```\n{\n  \"error\": \"Request not found\"\n}\n\n ```\n\nEndFragment"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "muzan login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"muzan@gmail.com\",\r\n    \"password\": \"56789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/GROWZY/routes/api.php/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "GROWZY",
+            "routes",
+            "api.php",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_02yn",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0feq",
+      "secret": true
+    }
+  ]
+}
