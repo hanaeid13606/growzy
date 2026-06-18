@@ -3,9 +3,11 @@ require_once "../repos/FeedbackRepo.php";
 require_once "../helpers/response.php";
 require_once '../helpers/jwt.php';
 require_once '../cache/redis.php';
+// returns all feedback , cached in redis
 function GetAllFeedback(){
     global $redis;
     $cacheKey= 'feedback:all';
+// check redis cache 
     if($redis->exists($cacheKey)){
         response(200,"feedback fetched successfully",[
             'source' => 'redis',
@@ -13,6 +15,7 @@ function GetAllFeedback(){
         ]);
         return;
     }
+// fetch from database and cache result
     $GetAllFeedback = GetAllFeedbackRepo();
     $redis->setex($cacheKey, 3600,json_encode($GetAllFeedback));
     response(200,"feedback fetched successfully", 
@@ -21,6 +24,7 @@ function GetAllFeedback(){
         'data'=> $GetAllFeedback
     ]);
 }
+// returns a single feedback by id , cached in redis
 function GetFeedbackById($feedbackID){
     global $redis;
     $cacheKey= 'feedback:'. $feedbackID;
@@ -41,6 +45,7 @@ function GetFeedbackById($feedbackID){
         'data'=> $feedback
     ]);
 }
+// returns feedback count per idea - admin only
 function CountFeedbackByIdea($ideaID){
     
     $verifiedToken = verifyToken();
@@ -53,6 +58,7 @@ function CountFeedbackByIdea($ideaID){
     }
 
 }
+// returns feedback count per session - admin only
 function CountFeedbackBySession($sessID){
     
     $verifiedToken = verifyToken();
@@ -64,6 +70,8 @@ function CountFeedbackBySession($sessID){
         response(404,"no feedback found");
     }
 }
+// creates new feedback - all user only
+// requires either sessID or ideaID (not both null)
 function CreateFeedback($data){
     global $redis;
     $verifiedToken = verifyToken();
@@ -71,10 +79,10 @@ function CreateFeedback($data){
     $rating = $data['rating'] ?? '';
     $content = $data['content'] ?? '';
     $timestamp = $data['timestamp'] ?? '';
-    $sessID= $data['sessID'] ?? '';
+    $sessID= $data['sessID'] ?? null;
     $userID = $verifiedToken->user_id;
-    $ideaID= $data['ideaID'] ?? '';
-
+    $ideaID= $data['ideaID'] ?? null;
+// validate required fields
     if(empty($rating) || empty($content) || empty($timestamp) || empty($userID) || (empty($sessID) && empty($ideaID))){
         response(400,"missing fields");
         exit;
@@ -83,6 +91,7 @@ function CreateFeedback($data){
     $redis->del('feedback:all');
     response(201,"feedback created successfully");
 }
+// deletes feedback by id - admin only
 function DeleteFeedback($feedbackID){
     global $redis;
     $verifiedToken = verifyToken();
