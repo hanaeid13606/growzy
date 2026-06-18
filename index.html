@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GROWZY — API Control Hub & Presentation Dashboard</title>
+    
+    <!-- Google Fonts: Outfit for UI, JetBrains Mono for Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-base: #0B0E14;
+            --bg-surface: #121824;
+            --bg-element: #1B2336;
+            --border-glow: rgba(79, 70, 229, 0.25);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --accent-primary: #6366F1;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --color-success: #10B981;
+            --color-error: #EF4444;
+            --color-warning: #F59E0B;
+            --color-info: #3B82F6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-element);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        /* Header Navigation */
+        .app-header {
+            background: rgba(18, 24, 36, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #6366F1, #3B82F6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #FFF, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text span {
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--color-success);
+        }
+
+        .server-status.offline {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: var(--color-error);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: currentColor;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        .token-badge {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .token-badge:hover {
+            background: var(--accent-primary);
+            color: white;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* Main Workspace */
+        .workspace {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            height: calc(100vh - 66px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle);
+            overflow-y: auto;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .category-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .category-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding-left: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .endpoint-item {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 0.65rem 0.75rem;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .endpoint-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+        }
+
+        .endpoint-item.active {
+            background-color: var(--bg-element);
+            border-color: var(--border-glow);
+            color: var(--text-main);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.05);
+        }
+
+        .method-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            min-width: 55px;
+            text-align: center;
+        }
+
+        .method-badge.post { background: rgba(16, 185, 129, 0.1); color: var(--color-success); }
+        .method-badge.get { background: rgba(59, 130, 246, 0.1); color: var(--color-info); }
+        .method-badge.put { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+        .method-badge.delete { background: rgba(239, 68, 68, 0.1); color: var(--color-error); }
+
+        /* Main Dashboard Panel */
+        .main-panel {
+            overflow-y: auto;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            background-color: var(--bg-base);
+        }
+
+        /* Overview Page */
+        .overview-screen {
+            padding: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            gap: 1.5rem;
+        }
+
+        .overview-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            background: linear-gradient(to right, #FFF, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .overview-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .feature-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            color: var(--accent-primary);
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Interactive Playground Workspace */
+        .playground {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 100%;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .details-column {
+            border-right: 1px solid var(--border-subtle);
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .response-column {
+            background-color: #080A0F;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Details elements */
+        .endpoint-header-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .endpoint-path-container {
+            display: flex;
+            align-items: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            gap: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .endpoint-path {
+            color: var(--text-main);
+            overflow-x: auto;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .endpoint-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Query Parameter Input fields */
+        .params-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .input-row label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .input-field {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 5px var(--accent-glow);
+        }
+
+        /* JSON Text Area */
+        .json-editor-container {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .json-editor {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: #A5B4FC;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            padding: 1rem;
+            width: 100%;
+            min-height: 200px;
+            outline: none;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .json-editor:focus {
+            border-color: var(--accent-primary);
+        }
+
+        /* Send Request Button */
+        .send-btn {
+            background: linear-gradient(135deg, #6366F1, #4F46E5);
+            border: none;
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .send-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Response Panel elements */
+        .response-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+        }
+
+        .response-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .response-status.success { color: var(--color-success); }
+        .response-status.error { color: var(--color-error); }
+        .response-status.waiting { color: var(--text-muted); }
+
+        .response-time {
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+        }
+
+        .response-viewer {
+            flex: 1;
+            background-color: #06080C;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #A5B4FC;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translateY(150%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
+
+        /* Token Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            transform: scale(0.9);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .token-textarea {
+            background-color: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: #A5B4FC;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            width: 100%;
+            height: 100px;
+            resize: none;
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-element);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+        <div class="brand-area">
+            <div class="brand-logo">G</div>
+            <div class="brand-text">
+                <h1>GROWZY Control Hub</h1>
+                <span>API Presentation Suite v1.1</span>
+            </div>
+        </div>
+
+        <div class="header-controls">
+            <!-- Active JWT status badge -->
+            <div class="token-badge" id="token-status-badge" onclick="openTokenModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span id="token-badge-text">Auth: None</span>
+            </div>
+
+            <!-- Backend Live Status Checker -->
+            <div class="server-status" id="server-status-badge">
+                <span class="status-dot"></span>
+                <span id="server-status-text">Checking server...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- App Main Workspace -->
+    <div class="workspace">
+        
+        <!-- Sidebar Navigation lists all Endpoints -->
+        <aside class="sidebar">
+            <!-- 1. Authentication -->
+            <div class="category-group">
+                <div class="category-title">Authentication</div>
+                <button class="endpoint-item" onclick="selectEndpoint('login')">
+                    <span>Login</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('register')">
+                    <span>Register</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('forgot-password')">
+                    <span>Forgot Pass</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('reset-password')">
+                    <span>Reset Pass</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+            </div>
+
+            <!-- 2. Profile Management -->
+            <div class="category-group">
+                <div class="category-title">User Profile</div>
+                <button class="endpoint-item" onclick="selectEndpoint('get-profile')">
+                    <span>Get Profile</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('update-profile')">
+                    <span>Update Profile</span>
+                    <span class="method-badge put">PUT</span>
+                </button>
+            </div>
+
+            <!-- 3. Feedback Management -->
+            <div class="category-group">
+                <div class="category-title">Feedback</div>
+                <button class="endpoint-item" onclick="selectEndpoint('get-feedbacks')">
+                    <span>Get All</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-feedback-id')">
+                    <span>Get By ID</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('count-feedback-idea')">
+                    <span>Count (Idea)</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('count-feedback-session')">
+                    <span>Count (Session)</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('create-feedback')">
+                    <span>Create</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('delete-feedback')">
+                    <span>Delete</span>
+                    <span class="method-badge delete">DELETE</span>
+                </button>
+            </div>
+
+            <!-- 4. Idea Management -->
+            <div class="category-group">
+                <div class="category-title">Ideas</div>
+                <button class="endpoint-item" onclick="selectEndpoint('get-ideas-price')">
+                    <span>Get All / Price</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-idea-id')">
+                    <span>Get By ID</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('create-idea')">
+                    <span>Create</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('update-idea')">
+                    <span>Update</span>
+                    <span class="method-badge put">PUT</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('delete-idea')">
+                    <span>Delete</span>
+                    <span class="method-badge delete">DELETE</span>
+                </button>
+            </div>
+
+            <!-- 5. Request Management -->
+            <div class="category-group">
+                <div class="category-title">Requests</div>
+                <button class="endpoint-item" onclick="selectEndpoint('create-request')">
+                    <span>Create</span>
+                    <span class="method-badge post">POST</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-requests')">
+                    <span>Get All</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-requests-idea')">
+                    <span>Get By Idea</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('get-request-id')">
+                    <span>Get By ID</span>
+                    <span class="method-badge get">GET</span>
+                </button>
+                <button class="endpoint-item" onclick="selectEndpoint('delete-request')">
+                    <span>Delete</span>
+                    <span class="method-badge delete">DELETE</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Panel Workspace -->
+        <main class="main-panel">
+            
+            <!-- Default Welcome/Overview Screen -->
+            <div class="overview-screen" id="overview-screen">
+                <h2 class="overview-title">GROWZY API Control Hub</h2>
+                <p class="overview-desc">Welcome to the interactive presentation suite. This dashboard allows you to present the entire API capabilities of the GROWZY project in real-time to your instructor. You can edit parameters, send live requests, and inspect responses directly from your local XAMPP server.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>⚡ Live Testing Playground</h3>
+                        <p>Interact directly with the local PHP routes. You don't need Postman; everything can be executed right here inside the dashboard.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔑 Intelligent Auth Sync</h3>
+                        <p>Logging in will automatically capture the returned JWT access token, store it, and attach it to requests that require authentication.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔧 All Modules Supported</h3>
+                        <p>Fully supports testing the Authentication flow, User Profiles, Feedback systems, Business Ideas, and Requests.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎨 Clean presentation interface</h3>
+                        <p>Designed with visual excellence in mind. Ideal for projection screens and classroom presentations.</p>
+                    </div>
+                </div>
+                
+                <p style="font-size: 0.85rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; text-align: center; margin-top: 2rem;">Select an endpoint from the left menu to begin.</p>
+            </div>
+
+            <!-- Endpoint Workspace Screen -->
+            <div class="playground" id="playground-screen" style="display: none;">
+                
+                <!-- Left Column: Details & Parameter Inputs -->
+                <div class="details-column">
+                    <div class="endpoint-header-info">
+                        <span class="method-badge" id="details-method-badge">POST</span>
+                        <h2 id="details-title">Endpoint Name</h2>
+                        <div class="endpoint-path-container">
+                            <span class="endpoint-path" id="details-path">/routes/api.php/login</span>
+                        </div>
+                    </div>
+
+                    <p class="endpoint-description" id="details-description">Endpoint description goes here...</p>
+
+                    <!-- Section for Query Params (if applicable) -->
+                    <div id="query-params-section" style="display: none;">
+                        <h3 class="section-title">Query Parameters</h3>
+                        <div class="params-form" id="query-params-form">
+                            <!-- Dynamic inputs will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Section for Request JSON Body (if applicable) -->
+                    <div id="request-body-section" style="display: none;" class="json-editor-container">
+                        <h3 class="section-title">Request Body (JSON)</h3>
+                        <textarea class="json-editor" id="json-request-body" spellcheck="false"></textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <button class="send-btn" id="send-request-btn" onclick="executeLiveRequest()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <span>Send Request</span>
+                    </button>
+                </div>
+
+                <!-- Right Column: Live Server Response Readout -->
+                <div class="response-column">
+                    <h3 class="section-title" style="color: var(--text-muted);">Live Server Response</h3>
+                    
+                    <div class="response-status-bar">
+                        <div class="response-status waiting" id="response-status-badge">
+                            <span class="status-dot"></span>
+                            <span id="response-status-text">Waiting for request...</span>
+                        </div>
+                        <div class="response-time" id="response-time-text">-- ms</div>
+                    </div>
+
+                    <pre class="response-viewer" id="response-viewer-body">{
+  "status": "Waiting for request input..."
+}</pre>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Token Manager Modal -->
+    <div class="modal-overlay" id="token-modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>JWT Authorization Token</h3>
+                <button class="close-modal-btn" onclick="closeTokenModal()">&times;</button>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">This token is automatically attached as an <code>Authorization: Bearer <token></code> header to requests requiring auth.</p>
+            <textarea class="token-textarea" id="modal-token-input" placeholder="No active token. Log in to generate one, or paste one here."></textarea>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="clearActiveToken()">Clear Token</button>
+                <button class="btn-primary" onclick="saveActiveToken()">Save Token</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast message alert notifier -->
+    <div class="toast" id="toast-notify">
+        <span id="toast-message">Copied successfully!</span>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        // Data Registry containing all endpoints definition
+        const endpoints = {
+            'login': {
+                name: 'Login User/Admin',
+                method: 'POST',
+                path: './routes/api.php/login',
+                description: 'Authenticates a user/admin and returns a JWT access token.',
+                hasBody: true,
+                bodyTemplate: {
+                    email: 'superadmin@growzy.com',
+                    password: 'securepassword123'
+                }
+            },
+            'register': {
+                name: 'Register User/Admin',
+                method: 'POST',
+                path: './routes/api.php/register',
+                description: 'Registers a new user account. For registering an admin, provide the role as admin and include the correct secret_key.',
+                hasBody: true,
+                bodyTemplate: {
+                    name: 'Super Admin',
+                    email: 'superadmin@growzy.com',
+                    password: 'securepassword123',
+                    role: 'admin',
+                    secret_key: 'YOUR_SECRET_KEY'
+                }
+            },
+            'forgot-password': {
+                name: 'Forgot Password Request',
+                method: 'POST',
+                path: './routes/api.php/forgot-password',
+                description: 'Initiates password reset flow and returns a reset token if successful.',
+                hasBody: true,
+                bodyTemplate: {
+                    email: 'superadmin@growzy.com'
+                }
+            },
+            'reset-password': {
+                name: 'Reset Password',
+                method: 'POST',
+                path: './routes/api.php/reset-password',
+                description: 'Resets the password of the account using the reset token.',
+                hasBody: true,
+                bodyTemplate: {
+                    token: 'PASTE_RESET_TOKEN_HERE',
+                    password: 'newsecurepassword123'
+                }
+            },
+            'get-profile': {
+                name: 'Get User Profile',
+                method: 'GET',
+                path: './routes/api.php/user',
+                description: 'Retrieves profile details of the logged-in user. Requires Bearer Token.',
+                requiresAuth: true
+            },
+            'update-profile': {
+                name: 'Update User Profile',
+                method: 'PUT',
+                path: './routes/api.php/user',
+                description: 'Updates profile details of the logged-in user. Requires Bearer Token.',
+                requiresAuth: true,
+                hasBody: true,
+                bodyTemplate: {
+                    name: 'Super Admin Updated',
+                    email: 'superadmin@growzy.com',
+                    yearsOfExperience: 5,
+                    field: 'Management'
+                }
+            },
+            'get-feedbacks': {
+                name: 'Get All Feedback',
+                method: 'GET',
+                path: './routes/feedbackAPI.php/Feedback',
+                description: 'Retrieves all active feedback rows. Public access, no authentication required.'
+            },
+            'get-feedback-id': {
+                name: 'Get Feedback By ID',
+                method: 'GET',
+                path: './routes/feedbackAPI.php/Feedback',
+                description: 'Retrieves detailed data for a specific feedback entry by its ID.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'feedbackID', label: 'Feedback ID', value: '2', placeholder: 'e.g. 2' }
+                ]
+            },
+            'count-feedback-idea': {
+                name: 'Count Feedback By Idea',
+                method: 'GET',
+                path: './routes/feedbackAPI.php/Feedback',
+                description: 'Counts the total number of feedbacks left for a specific idea. Requires Admin Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'countidea', label: 'Idea ID to Count', value: '2', placeholder: 'e.g. 2' }
+                ]
+            },
+            'count-feedback-session': {
+                name: 'Count Feedback By Session',
+                method: 'GET',
+                path: './routes/feedbackAPI.php/Feedback',
+                description: 'Counts the total number of feedbacks left for a specific consultancy session. Requires Admin Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'countsession', label: 'Session ID to Count', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'create-feedback': {
+                name: 'Create Feedback',
+                method: 'POST',
+                path: './routes/feedbackAPI.php/Feedback',
+                description: 'Submits new feedback for a session and/or business idea. Requires User Token.',
+                requiresAuth: true,
+                hasBody: true,
+                bodyTemplate: {
+                    content: 'Excellent idea with great scalability potential.',
+                    rating: 9,
+                    timestamp: '2026-06-19 00:00:00',
+                    sessID: 1,
+                    ideaID: 2
+                }
+            },
+            'delete-feedback': {
+                name: 'Delete Feedback',
+                method: 'DELETE',
+                path: './routes/feedbackAPI.php/Feedback',
+                description: 'Deletes a feedback entry from the database by ID. Requires Admin Token.',
+                requiresAuth: true,
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'feedbackID', label: 'Feedback ID to Delete', value: '2', placeholder: 'e.g. 2' }
+                ]
+            },
+            'get-ideas-price': {
+                name: 'Get Ideas By Price / Filter',
+                method: 'GET',
+                path: './routes/apiIdea.php',
+                description: 'Returns all business ideas or filters them by price/investment scale.'
+            },
+            'get-idea-id': {
+                name: 'Get Idea By ID',
+                method: 'GET',
+                path: './routes/apiIdea.php',
+                description: 'Retrieves specific business idea data using its ID.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'id', label: 'Idea ID', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'create-idea': {
+                name: 'Create Idea',
+                method: 'POST',
+                path: './routes/apiIdea.php',
+                description: 'Submits a new business idea into the system.',
+                hasBody: true,
+                bodyTemplate: {
+                    title: 'Smart Logistics System',
+                    description: 'AI-powered routing tool for regional distributors.',
+                    min_investment: 75000,
+                    category: 'Logistics'
+                }
+            },
+            'update-idea': {
+                name: 'Update Idea',
+                method: 'PUT',
+                path: './routes/apiIdea.php',
+                description: 'Updates a business idea profile.',
+                hasBody: true,
+                bodyTemplate: {
+                    id: 1,
+                    title: 'Smart Logistics System Updated',
+                    description: 'Updated descriptions for regional distributor AI systems.',
+                    min_investment: 80000,
+                    category: 'Logistics'
+                }
+            },
+            'delete-idea': {
+                name: 'Delete Idea',
+                method: 'DELETE',
+                path: './routes/apiIdea.php',
+                description: 'Deletes a business idea by ID.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'id', label: 'Idea ID to Delete', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'create-request': {
+                name: 'Create Request',
+                method: 'POST',
+                path: './routes/requestRoutes.php',
+                description: 'Submits a new request for an idea. Provide the idea ID in the query param.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'ideaId', label: 'Idea ID', value: '1', placeholder: 'e.g. 1' }
+                ],
+                hasBody: true,
+                bodyTemplate: {
+                    description: 'Need consultancy on local distribution routing scaling.',
+                    documentation: 'https://example.com/docs/logistics.pdf',
+                    type: 'consultancy',
+                    status: 'pending'
+                }
+            },
+            'get-requests': {
+                name: 'Get All Requests',
+                method: 'GET',
+                path: './routes/requestRoutes.php',
+                description: 'Retrieves all requests registered in the system.'
+            },
+            'get-requests-idea': {
+                name: 'Get Requests By Idea ID',
+                method: 'GET',
+                path: './routes/requestRoutes.php',
+                description: 'Retrieves all requests related to a specific business idea.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'ideaId', label: 'Idea ID', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'get-request-id': {
+                name: 'Get Request By ID',
+                method: 'GET',
+                path: './routes/requestRoutes.php',
+                description: 'Retrieves detailed data for a specific request using its ID.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'id', label: 'Request ID', value: '1', placeholder: 'e.g. 1' }
+                ]
+            },
+            'delete-request': {
+                name: 'Delete Request',
+                method: 'DELETE',
+                path: './routes/requestRoutes.php',
+                description: 'Deletes a request by its ID.',
+                hasQueryParams: true,
+                queryParams: [
+                    { name: 'id', label: 'Request ID to Delete', value: '1', placeholder: 'e.g. 1' }
+                ]
+            }
+        };
+
+        let activeEndpointKey = null;
+
+        // On Load initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            checkServerStatus();
+            loadActiveToken();
+        });
+
+        // Test if Apache/PHP server is online
+        function checkServerStatus() {
+            const statusBadge = document.getElementById('server-status-badge');
+            const statusText = document.getElementById('server-status-text');
+
+            fetch('./routes/api.php/login', { method: 'POST', body: '{}' })
+                .then(res => {
+                    // Even a 400/404 response means the server is online and responding
+                    statusBadge.classList.remove('offline');
+                    statusText.textContent = 'Server: Online';
+                })
+                .catch(err => {
+                    statusBadge.classList.add('offline');
+                    statusText.textContent = 'Server: Offline';
+                });
+        }
+
+        // Endpoint Selection Handler
+        function selectEndpoint(key) {
+            activeEndpointKey = key;
+            const config = endpoints[key];
+
+            // Update active state class in sidebar items
+            document.querySelectorAll('.endpoint-item').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.outerHTML.includes(`'${key}'`)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Hide Welcome Screen, Show Workspace
+            document.getElementById('overview-screen').style.display = 'none';
+            document.getElementById('playground-screen').style.display = 'grid';
+
+            // Set Title & Path & Method
+            document.getElementById('details-title').textContent = config.name;
+            document.getElementById('details-path').textContent = config.path;
+            
+            const methodBadge = document.getElementById('details-method-badge');
+            methodBadge.className = `method-badge ${config.method.toLowerCase()}`;
+            methodBadge.textContent = config.method;
+
+            document.getElementById('details-description').textContent = config.description;
+
+            // Handle Query Parameters
+            const querySection = document.getElementById('query-params-section');
+            const queryForm = document.getElementById('query-params-form');
+            queryForm.innerHTML = '';
+            if (config.hasQueryParams) {
+                querySection.style.display = 'block';
+                config.queryParams.forEach(p => {
+                    const row = document.createElement('div');
+                    row.className = 'input-row';
+                    row.innerHTML = `
+                        <label for="param-${p.name}">${p.label} (${p.name})</label>
+                        <input class="input-field" type="text" id="param-${p.name}" value="${p.value}" placeholder="${p.placeholder}">
+                    `;
+                    queryForm.appendChild(row);
+                });
+            } else {
+                querySection.style.display = 'none';
+            }
+
+            // Handle Request JSON body
+            const bodySection = document.getElementById('request-body-section');
+            const bodyEditor = document.getElementById('json-request-body');
+            if (config.hasBody) {
+                bodySection.style.display = 'flex';
+                bodyEditor.value = JSON.stringify(config.bodyTemplate, null, 2);
+            } else {
+                bodySection.style.display = 'none';
+            }
+
+            // Reset Response Box
+            const statusBadge = document.getElementById('response-status-badge');
+            statusBadge.className = 'response-status waiting';
+            document.getElementById('response-status-text').textContent = 'Waiting for request...';
+            document.getElementById('response-time-text').textContent = '-- ms';
+            document.getElementById('response-viewer-body').textContent = '{\n  "status": "Waiting for request input..."\n}';
+        }
+
+        // Live Endpoint Request Executer
+        function executeLiveRequest() {
+            if (!activeEndpointKey) return;
+
+            const config = endpoints[activeEndpointKey];
+            
+            // Build URL with Query Params
+            let url = config.path;
+            if (config.hasQueryParams) {
+                const params = [];
+                config.queryParams.forEach(p => {
+                    const val = document.getElementById(`param-${p.name}`).value;
+                    if (val !== '') {
+                        params.push(`${p.name}=${encodeURIComponent(val)}`);
+                    }
+                });
+                if (params.length > 0) {
+                    url += `?${params.join('&')}`;
+                }
+            }
+
+            // Setup Fetch options
+            const options = {
+                method: config.method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            // Attach Bearer token if required and exists
+            const token = localStorage.getItem('growzy_token');
+            if (token) {
+                options.headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            // Attach Body if exists
+            if (config.hasBody) {
+                const bodyContent = document.getElementById('json-request-body').value;
+                try {
+                    // Try parsing to validate JSON formatting
+                    JSON.parse(bodyContent);
+                    options.body = bodyContent;
+                } catch (e) {
+                    showToast('Invalid JSON syntax in request body!');
+                    return;
+                }
+            }
+
+            // UI feedback: loading state
+            const statusBadge = document.getElementById('response-status-badge');
+            statusBadge.className = 'response-status waiting';
+            document.getElementById('response-status-text').textContent = 'Sending request...';
+            const startTime = performance.now();
+
+            fetch(url, options)
+                .then(res => {
+                    const duration = Math.round(performance.now() - startTime);
+                    document.getElementById('response-time-text').textContent = `${duration} ms`;
+
+                    // Update status badge
+                    if (res.ok) {
+                        statusBadge.className = 'response-status success';
+                    } else {
+                        statusBadge.className = 'response-status error';
+                    }
+                    document.getElementById('response-status-text').textContent = `${res.status} ${res.statusText}`;
+
+                    // Read content
+                    return res.text().then(text => {
+                        let parsed;
+                        try {
+                            parsed = JSON.parse(text);
+                        } catch (e) {
+                            parsed = text; // Plain text fallback
+                        }
+
+                        // Auto-Save Token if Login request succeeded
+                        if (activeEndpointKey === 'login' && res.ok && parsed.token) {
+                            saveTokenDirect(parsed.token);
+                            showToast('Token automatically saved & synced!');
+                        }
+
+                        // Print Response Body
+                        const viewer = document.getElementById('response-viewer-body');
+                        if (typeof parsed === 'object') {
+                            viewer.textContent = JSON.stringify(parsed, null, 2);
+                        } else {
+                            viewer.textContent = parsed;
+                        }
+                    });
+                })
+                .catch(err => {
+                    const duration = Math.round(performance.now() - startTime);
+                    document.getElementById('response-time-text').textContent = `${duration} ms`;
+                    statusBadge.className = 'response-status error';
+                    document.getElementById('response-status-text').textContent = 'Connection Failed';
+                    document.getElementById('response-viewer-body').textContent = JSON.stringify({
+                        error: 'Failed to establish request connection to server.',
+                        details: err.message
+                    }, null, 2);
+                });
+        }
+
+        // Active Token Managers
+        function loadActiveToken() {
+            const token = localStorage.getItem('growzy_token');
+            const badgeText = document.getElementById('token-badge-text');
+            if (token) {
+                // Truncate for UI
+                badgeText.textContent = `Auth: Active Token`;
+            } else {
+                badgeText.textContent = `Auth: None`;
+            }
+        }
+
+        function saveTokenDirect(token) {
+            localStorage.setItem('growzy_token', token);
+            loadActiveToken();
+        }
+
+        function openTokenModal() {
+            document.getElementById('token-modal-overlay').classList.add('show');
+            document.getElementById('modal-token-input').value = localStorage.getItem('growzy_token') || '';
+        }
+
+        function closeTokenModal() {
+            document.getElementById('token-modal-overlay').classList.remove('show');
+        }
+
+        function saveActiveToken() {
+            const token = document.getElementById('modal-token-input').value.trim();
+            if (token) {
+                localStorage.setItem('growzy_token', token);
+                showToast('Token saved successfully!');
+            } else {
+                localStorage.removeItem('growzy_token');
+            }
+            loadActiveToken();
+            closeTokenModal();
+        }
+
+        function clearActiveToken() {
+            localStorage.removeItem('growzy_token');
+            document.getElementById('modal-token-input').value = '';
+            loadActiveToken();
+            showToast('Token cleared!');
+            closeTokenModal();
+        }
+
+        // Toast Messages Alert Trigger
+        function showToast(message) {
+            const toast = document.getElementById('toast-notify');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
