@@ -1,12 +1,12 @@
 <?php
 
-require_once __DIR__ . "/../connection.php";
+require_once __DIR__ . "/../pdoection.php";
 
 
 
 function createIdea($data) {
-    global $conn;
-    $stmt=$conn->prepare("INSERT INTO idea
+    global $pdo;
+    $stmt=$pdo->prepare("INSERT INTO idea
         (title,description,attachment,investmentRange,catID,userID)
         VALUES (?,?,?,?,?,?)
     ");
@@ -23,11 +23,10 @@ function createIdea($data) {
 
 
 function getIdeaById($id) {
-        global $conn;
+    
+    global $pdo;
 
-    $stmt =$conn->prepare(
-        "SELECT * FROM idea WHERE ideaID=?"
-    );
+    $stmt =$pdo->prepare( "SELECT * FROM idea WHERE ideaID=?");
 
     $stmt->execute([$id]);
 
@@ -35,10 +34,10 @@ function getIdeaById($id) {
 }
 
 
-function getIdeasSortedByPrice($conn) {
-        global $conn;
+function getIdeasSortedByPrice($pdo) {
+        global $pdo;
 
-    $stmt=$conn->query(
+    $stmt=$pdo->query(
         "SELECT * FROM idea ORDER BY investmentRange ASC"
     );
 
@@ -47,9 +46,9 @@ function getIdeasSortedByPrice($conn) {
 
 
 function deleteIdearepo($id) {
-        global $conn;
+        global $pdo;
 
-    $stmt =$conn->prepare(
+    $stmt =$pdo->prepare(
         "DELETE FROM idea WHERE ideaID=?"
     );
 
@@ -60,9 +59,9 @@ function deleteIdearepo($id) {
 
 function updateIdeaRepo($data)
 {
-    global $conn;
+    global $pdo;
 
-    $stmt = $conn->prepare("
+    $stmt = $pdo->prepare("
         UPDATE idea
         SET title=?, description=?, investmentRange=?, attachment=?
         WHERE ideaID=?

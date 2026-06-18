@@ -34,7 +34,7 @@ function postIdea()
 
 function getIdea()
 {
-    var_dump($_GET["id"]);
+    // var_dump($_GET["id"]);
     $idea = getIdeaById($_GET["id"]);
 
     if (!$idea) {
@@ -47,6 +47,8 @@ function getIdea()
 
         return;
     }
+
+    
 
 echo json_encode([
     "key" => "success",
