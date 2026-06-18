@@ -1,4 +1,5 @@
 <?php
+
 require_once "../controllers/loginCont.php";
 require_once "../controllers/registerCont.php";
 require_once "../controllers/resetCont.php";
@@ -43,5 +44,70 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && $path == '/ideas') {
 if ($_SERVER['REQUEST_METHOD'] == "GET" && $path == '/ideas/attachments') {
 
     getIdeaDocumentationsController($pdo);
+
+}
+if(
+    $_SERVER["REQUEST_METHOD"]=="GET"
+    &&
+    $path=="/sessions"
+){
+    AvailableSessions();
+}
+
+if(
+    $_SERVER["REQUEST_METHOD"]=="POST"
+    &&
+    preg_match(
+        "#^/session/book/(\d+)$#",
+        $path,
+        $matches
+    )
+){
+    BookSession(
+        $matches[1]
+    );
+}
+
+if(
+    $_SERVER["REQUEST_METHOD"]=="GET"
+    &&
+    preg_match(
+        "#^/session/(\d+)$#",
+        $path,
+        $matches
+    )
+){
+    GetSessionDetails(
+        $matches[1]
+    );
+}
+
+if(
+    $_SERVER["REQUEST_METHOD"]=="PUT"
+    &&
+    preg_match(
+        "#^/session/(\d+)$#",
+        $path,
+        $matches
+    )
+){
+    RescheduleSession(
+        $matches[1],
+        $data
+    );
+}
+
+if(
+    $_SERVER["REQUEST_METHOD"]=="DELETE"
+    &&
+    preg_match(
+        "#^/session/(\d+)$#",
+        $path,
+        $matches
+    )
+){
+    CancelConsultancySession(
+        $matches[1]
+    );
 
 }
