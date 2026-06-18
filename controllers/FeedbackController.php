@@ -79,9 +79,10 @@ function CreateFeedback($data){
     $rating = $data['rating'] ?? '';
     $content = $data['content'] ?? '';
     $timestamp = $data['timestamp'] ?? '';
-    $sessID= $_GET['sessID'] ?? '';
+    
     $userID = $verifiedToken->user_id;
-    $ideaID= $_GET['ideaID'] ?? '';
+    $sessID= $_GET['sessID'] ?? null;
+    $ideaID= $_GET['ideaID'] ?? null;
 // validate required fields
     if(empty($rating) || empty($content) || empty($timestamp) || empty($userID) || (empty($sessID) && empty($ideaID))){
         response(400,"missing fields");
