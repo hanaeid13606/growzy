@@ -6,6 +6,7 @@ require_once "../controllers/resetCont.php";
 require_once "../controllers/forgetCont.php";
 require_once "../controllers/userCont.php";
 require_once "../controllers/investorCont.php";
+require_once "../controllers/sessionController.php";
 
 
 
