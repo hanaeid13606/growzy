@@ -7,6 +7,8 @@ require_once "../controllers/forgetCont.php";
 require_once "../controllers/userCont.php";
 require_once "../controllers/investorCont.php";
 
+
+
 $data = json_decode(file_get_contents("php://input"),true);
 $path = $_SERVER['PATH_INFO'];
 
