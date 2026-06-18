@@ -380,6 +380,73 @@
             },
             "response": [],
             "_postman_id": "e6127363-8a44-45ee-95aa-8c845ee223d9"
+        },
+        {
+            "name": "GetUserProfile",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "localhost/GROWZY/routes/api.php/user",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "api.php",
+                        "user"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                },
+                "description": "<h2>Get User Profile</h2><p>Retrieves the profile information of the currently authenticated user. Requires Bearer Token.</p><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Profile retrieved successfully.</td><td><code>{\"message\": \"User profile retrieved successfully\", \"data\": {\"userID\": 1, \"name\": \"Hana Mohammed\", \"email\": \"hanaeid136@gmail.com\", \"role\": \"investor\", \"yearsOfExperience\": 6, \"field\": \"clothes\"}}</code></td></tr><tr><td><code>401 Unauthorized</code></td><td>Token missing or invalid.</td><td><code>{\"message\": \"Invalid token\"}</code></td></tr></tbody></table>"
+            },
+            "response": []
+        },
+        {
+            "name": "UpdateUserProfile",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Hana Mohammed Updated\",\n  \"email\": \"hanaeid136@gmail.com\",\n  \"yearsOfExperience\": 7,\n  \"field\": \"fashion\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": "localhost/GROWZY/routes/api.php/user",
+                "urlObject": {
+                    "path": [
+                        "GROWZY",
+                        "routes",
+                        "api.php",
+                        "user"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "query": [],
+                    "variable": []
+                },
+                "description": "<h2>Update User Profile</h2><p>Updates the profile information of the currently authenticated user. Requires Bearer Token.</p><h3>Request Body</h3><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>Yes</td><td>The updated name.</td></tr><tr><td><code>email</code></td><td>string</td><td>Yes</td><td>The updated email (must be unique).</td></tr><tr><td><code>yearsOfExperience</code></td><td>integer</td><td>No</td><td>Years of experience.</td></tr><tr><td><code>field</code></td><td>string</td><td>No</td><td>Field of work.</td></tr></tbody></table><h3>Responses</h3><table><thead><tr><th>Status</th><th>Description</th><th>Body</th></tr></thead><tbody><tr><td><code>200 OK</code></td><td>Profile updated successfully. Returns updated profile.</td><td><code>{\"message\": \"User profile updated successfully\", \"data\": {\"userID\": 1, \"name\": \"Hana Mohammed Updated\", \"email\": \"hanaeid136@gmail.com\", \"role\": \"investor\", \"yearsOfExperience\": 7, \"field\": \"fashion\"}}</code></td></tr><tr><td><code>400 Bad Request</code></td><td>Missing fields or invalid email format.</td><td><code>{\"message\": \"Name and Email are required fields\"}</code></td></tr><tr><td><code>409 Conflict</code></td><td>Email already taken by another account.</td><td><code>{\"message\": \"Email is already taken by another account\"}</code></td></tr></tbody></table>"
+            },
+            "response": []
         }
     ],
     "variable": [

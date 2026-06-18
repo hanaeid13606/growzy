@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../connection.php";
 
+
 function RegisterUser($name, $email, $hashedPassword, $role, $yearsOfExperience = 0, $field = '') {
     global $pdo;
     
