@@ -7,17 +7,31 @@ require_once '../cache/redis.php';
 function GetAllFeedback(){
     global $redis;
     $cacheKey= 'feedback:all';
-// check redis cache 
-    if($redis->exists($cacheKey)){
-        response(200,"feedback fetched successfully",[
-            'source' => 'redis',
-            'data'=> json_decode($redis->get($cacheKey),true)
-        ]);
-        return;
+    
+    // check redis cache 
+    if ($redis) {
+        try {
+            if ($redis->exists($cacheKey)) {
+                response(200,"feedback fetched successfully",[
+                    'source' => 'redis',
+                    'data'=> json_decode($redis->get($cacheKey),true)
+                ]);
+                return;
+            }
+        } catch (\Exception $e) {
+            // Ignore Redis connection/execution errors and fallback to DB
+        }
     }
-// fetch from database and cache result
+    
+    // fetch from database and cache result
     $GetAllFeedback = GetAllFeedbackRepo();
-    $redis->setex($cacheKey, 3600,json_encode($GetAllFeedback));
+    if ($redis) {
+        try {
+            $redis->setex($cacheKey, 3600, json_encode($GetAllFeedback));
+        } catch (\Exception $e) {
+            // Ignore Redis write errors
+        }
+    }
     response(200,"feedback fetched successfully", 
     [
         'source' => 'database',
@@ -28,18 +42,32 @@ function GetAllFeedback(){
 function GetFeedbackById($feedbackID){
     global $redis;
     $cacheKey= 'feedback:'. $feedbackID;
-    if($redis->exists($cacheKey)){
-        response(200,"feedback fetched successfully",[
-            'source' => 'redis',
-            'data'=> json_decode($redis->get($cacheKey),true)
-        ]);
-        return;
+    
+    if ($redis) {
+        try {
+            if ($redis->exists($cacheKey)) {
+                response(200,"feedback fetched successfully",[
+                    'source' => 'redis',
+                    'data'=> json_decode($redis->get($cacheKey),true)
+                ]);
+                return;
+            }
+        } catch (\Exception $e) {
+            // Ignore Redis connection/execution errors and fallback to DB
+        }
     }
+    
     $feedback=GetFeedbackByIdRepo($feedbackID);
     if(!$feedback){
         response(404,"feedback not found");
     }
-    $redis->setex($cacheKey, 3600,json_encode($feedback));
+    if ($redis) {
+        try {
+            $redis->setex($cacheKey, 3600, json_encode($feedback));
+        } catch (\Exception $e) {
+            // Ignore Redis write errors
+        }
+    }
     response(200,"feedback fetched successfully",[
         'source' => 'database',
         'data'=> $feedback
@@ -88,7 +116,13 @@ function CreateFeedback($data){
         exit;
     }
     CreateFeedbackRepo($sessID,$userID,$ideaID,$timestamp,$rating,$content);
-    $redis->del('feedback:all');
+    if ($redis) {
+        try {
+            $redis->del('feedback:all');
+        } catch (\Exception $e) {
+            // Ignore Redis delete errors
+        }
+    }
     response(201,"feedback created successfully");
 }
 // deletes feedback by id - admin only
@@ -101,7 +135,13 @@ function DeleteFeedback($feedbackID){
         exit;
     }
     DeleteFeedbackRepo($feedbackID);
-    $redis->del('feedback:all');
-    $redis->del('feedback:'.$feedbackID);
+    if ($redis) {
+        try {
+            $redis->del('feedback:all');
+            $redis->del('feedback:'.$feedbackID);
+        } catch (\Exception $e) {
+            // Ignore Redis delete errors
+        }
+    }
     response(200,"feedback deleted successfully");
 }
