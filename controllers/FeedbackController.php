@@ -3,9 +3,11 @@ require_once "../repos/FeedbackRepo.php";
 require_once "../helpers/response.php";
 require_once '../helpers/jwt.php';
 require_once '../cache/redis.php';
-// returns all feedback , cached in redis
+// returns all feedback , cached in redis -admin only
 function GetAllFeedback(){
     global $redis;
+    $verifiedToken = verifyToken();
+    require_admin($verifiedToken);
     $cacheKey= 'feedback:all';
 // check redis cache 
     if($redis->exists($cacheKey)){
@@ -24,9 +26,11 @@ function GetAllFeedback(){
         'data'=> $GetAllFeedback
     ]);
 }
-// returns a single feedback by id , cached in redis
+// returns a single feedback by id , cached in redis-user only
 function GetFeedbackById($feedbackID){
     global $redis;
+    $verifiedToken = verifyToken();
+    require_user($verifiedToken);
     $cacheKey= 'feedback:'. $feedbackID;
     if($redis->exists($cacheKey)){
         response(200,"feedback fetched successfully",[
@@ -78,13 +82,13 @@ function CreateFeedback($data){
     require_user($verifiedToken);
     $rating = $data['rating'] ?? '';
     $content = $data['content'] ?? '';
-    $timestamp = $data['timestamp'] ?? '';
+    $timestamp = $data['timestamp'] ?? null;
     
     $userID = $verifiedToken->user_id;
     $sessID= $_GET['sessID'] ?? null;
     $ideaID= $_GET['ideaID'] ?? null;
 // validate required fields
-    if(empty($rating) || empty($content) || empty($timestamp) || empty($userID) || (empty($sessID) && empty($ideaID))){
+    if(empty($rating) || empty($content) || empty($userID) || (empty($sessID) && empty($ideaID))){
         response(400,"missing fields");
         exit;
     }

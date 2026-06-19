@@ -32,12 +32,12 @@ function CountFeedbackBySessionRepo($sessID){
     return $CountFeedbackBySession->fetch(PDO::FETCH_ASSOC);
 
 }
-function CreateFeedbackRepo($sessID,$userID,$ideaID,$timestamp,$rating,$content){
+function CreateFeedbackRepo($sessID,$userID,$ideaID,$rating,$content){
     global $pdo;
-    $query="INSERT INTO Feedback(sessID,userID,ideaID,timestamp,rating,content)
-    VALUES(?,?,?,?,?,?)";
+    $query="INSERT INTO Feedback(sessID,userID,ideaID,rating,content)
+    VALUES(?,?,?,?,?)";
     $createFeedback=$pdo->prepare($query);
-    return $createFeedback->execute([$sessID,$userID,$ideaID,$timestamp,$rating,$content]);
+    return $createFeedback->execute([$sessID,$userID,$ideaID,$rating,$content]);
 }
 function DeleteFeedbackRepo($feedbackID){
     global $pdo;
