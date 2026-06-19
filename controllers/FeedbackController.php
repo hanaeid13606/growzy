@@ -92,7 +92,7 @@ function CreateFeedback($data){
         response(400,"missing fields");
         exit;
     }
-    CreateFeedbackRepo($sessID,$userID,$ideaID,$timestamp,$rating,$content);
+    CreateFeedbackRepo($sessID,$userID,$ideaID,$rating,$content);
     $redis->del('feedback:all');
     response(201,"feedback created successfully");
 }
